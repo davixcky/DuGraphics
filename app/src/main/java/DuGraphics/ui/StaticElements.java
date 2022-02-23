@@ -16,7 +16,7 @@ public class StaticElements {
     public static UIButton exitBtn(State parent, Handler handler, float x, float y) {
         UIButton exitBtn = new UIButton(parent, x, y, UIButton.btnImage, () -> System.out.println("Exit button pressed"));
         exitBtn.setText("EXIT");
-        exitBtn.setHover(UIButton.btnHoverImager, "CLOSE GAME");
+        exitBtn.setHover(UIButton.btnHoverImager, "CLOSE APP");
 
         return exitBtn;
     }
