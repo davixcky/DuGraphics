@@ -90,7 +90,7 @@ public class MainState extends State {
                 textColor,
                 Assets.getFont(Assets.FontsName.SPACE_MISSION, (int) (currentDimension.width * 0.09f)));
 
-        UIObject.drawString(g, "David Orozco",
+        UIObject.drawString(g, "Developed by David Orozco",
                 currentDimension.width / 2,
                 y + (int) (titleDimensions.height * 0.5f),
                 true,
