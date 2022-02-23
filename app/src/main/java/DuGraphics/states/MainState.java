@@ -16,29 +16,39 @@ public class MainState extends State {
     private int red, green, blue;
     private int opacity = 0;
     private boolean increase = true;
-    private Random random;
+    private final Random random;
 
-    private int y;
+    private UIButton multiplayerBtn, settingsBtn, sourceCodeBtn, exitBtn;
+
+    private Dimension titleDimensions;
 
     public MainState(Handler handler) {
         super(handler);
 
         random = new Random();
-        y = handler.boardDimensions().height / 2;
         red = green = blue = 255;
+    }
+
+    private int getDynamicX(int width) {
+        return (int) (handler.boardDimensions().width * 0.5f - width / 2);
+    }
+
+    private int getDynamicY(int height) {
+        return handler.boardDimensions().height / 2 + height;
     }
 
     @Override
     protected void initComponents() {
-        int x = (int) (handler.boardDimensions().width * 0.5f - 128 / 2);
-        int y = handler.boardDimensions().height / 2 + 101;
+        // 125 and 21 are the max values for the current sprites
+        int x = getDynamicX(105);
+        int y = getDynamicY(21);
 
-        UIButton multiplayerBtn = StaticElements.multiplayerBtn(this, handler, x, y);
+        multiplayerBtn = StaticElements.multiplayerBtn(this, handler, x, y);
         multiplayerBtn.setSize(new Dimension(105, 40));
 
-        UIButton settingsBtn = StaticElements.settingsBtn(this, handler, x, UIButton.getRelativeHeight(multiplayerBtn));
+        settingsBtn = StaticElements.settingsBtn(this, handler, x, UIButton.getRelativeHeight(multiplayerBtn));
 
-        UIButton sourceCodeBtn = new UIButton(this, x, UIObject.getRelativeHeight(settingsBtn), UIButton.btnImage, () -> {
+        sourceCodeBtn = new UIButton(this, x, UIObject.getRelativeHeight(settingsBtn), UIButton.btnImage, () -> {
             try {
                 Desktop.getDesktop().browse(URI.create("https://github.com/Norte-invaders/MenuSonido"));
             } catch (IOException e) {
@@ -48,7 +58,7 @@ public class MainState extends State {
         sourceCodeBtn.setText("CODEBASE");
         sourceCodeBtn.setHover(UIButton.btnHoverImager, "OPEN GITHUB");
 
-        UIButton exitBtn = StaticElements.exitBtn(this, handler, x, UIButton.getRelativeHeight(sourceCodeBtn));
+        exitBtn = StaticElements.exitBtn(this, handler, x, UIButton.getRelativeHeight(sourceCodeBtn));
 
         uiManager.addObjects(multiplayerBtn, settingsBtn, sourceCodeBtn, exitBtn);
     }
@@ -74,21 +84,37 @@ public class MainState extends State {
     @Override
     public void render(Graphics g) {
         Color textColor = new Color(red, green, blue, opacity);
+        int y = (int) (handler.boardDimensions().width * 0.2f);
 
-        Dimension titleSize = UIObject.drawString(g, "AAB VISUALIZER",
+        titleDimensions = UIObject.drawString(g, "AAB VISUALIZER",
                 handler.boardDimensions().width / 2,
                 y,
                 true,
                 textColor,
-                Assets.getFont(Assets.FontsName.SPACE_MISSION, 100));
+                Assets.getFont(Assets.FontsName.SPACE_MISSION, (int) (handler.boardDimensions().width * 0.1f)));
 
         UIObject.drawString(g, "Kevin Cueto & David Orozco",
                 handler.boardDimensions().width / 2,
-                y + titleSize.height - 60,
+                y + (int) (titleDimensions.height * 0.5f),
                 true,
                 Color.white,
-                Assets.getFont(Assets.FontsName.SLKSCR, 30));
+                Assets.getFont(Assets.FontsName.SLKSCR, (int) (titleDimensions.height * 0.4f)));
 
         uiManager.render(g);
+    }
+
+    @Override
+    public void resizeComponents() {
+        // Update buttons dimensions if change
+        int width = 40 + (int) (handler.boardDimensions().width * 0.3f);
+        int height = 20 + (int) (handler.boardDimensions().height * 0.03f);
+
+        int x = getDynamicX(width);
+        int y = getDynamicY(height);
+
+        multiplayerBtn.updateCoordsBounds(new Rectangle(x, y, width, height));
+        settingsBtn.updateCoordsBounds(new Rectangle(x, (int) UIButton.getRelativeHeight(multiplayerBtn), width, height));
+        sourceCodeBtn.updateCoordsBounds(new Rectangle(x, (int) UIButton.getRelativeHeight(settingsBtn), width, height));
+        exitBtn.updateCoordsBounds(new Rectangle(x, (int) UIButton.getRelativeHeight(sourceCodeBtn), width, height));
     }
 }

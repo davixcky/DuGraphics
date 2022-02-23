@@ -37,6 +37,7 @@ public class Display {
             public void componentResized(ComponentEvent evt) {
                 Component c = (Component)evt.getSource();
                 System.out.printf("w: %d, h: %d\n", c.getBounds().width, c.getBounds().height);
+                controller.onResize(c.getBounds().getSize());
             }
         });
 

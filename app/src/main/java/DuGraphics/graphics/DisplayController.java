@@ -1,6 +1,9 @@
 package DuGraphics.graphics;
 
+import java.awt.*;
+
 public interface DisplayController {
-    public void start();
-    public void stop();
+    void start();
+    void stop();
+    void onResize(Dimension newDimensions);
 }

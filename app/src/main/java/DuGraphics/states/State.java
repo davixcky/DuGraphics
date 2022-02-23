@@ -53,4 +53,5 @@ public abstract class State {
     protected abstract void initComponents();
     public abstract void update();
     public abstract void render(Graphics g);
+    public abstract void resizeComponents();
 }

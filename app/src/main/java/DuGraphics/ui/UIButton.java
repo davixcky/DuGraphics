@@ -11,21 +11,15 @@ import java.util.ArrayList;
 
 public class UIButton extends UIObject {
 
-    private ArrayList<BufferedImage> images;
-    private ActionListener clicker;
-
+    private static final ArrayList<BufferedImage> buttonsAssets = Assets.getUiComponents(Assets.UI_ELEMENTS.BUTTONS);
+    public static BufferedImage btnImage = buttonsAssets.get(0);
+    public static BufferedImage btnHoverImager = buttonsAssets.get(3);
+    private final ArrayList<BufferedImage> images;
+    private final ActionListener clicker;
     private String text = null;
     private String hoverText = null;
     private boolean isCustomSize = false;
     private Dimension size;
-
-    private static ArrayList<BufferedImage> buttonsAssets = Assets.getUiComponents(Assets.UI_ELEMENTS.BUTTONS);
-    public static BufferedImage btnImage = buttonsAssets.get(0);
-    public static BufferedImage btnHoverImager = buttonsAssets.get(3);
-
-    public static ArrayList<BufferedImage> buttonsMuteAssets = Assets.getUiComponents(Assets.UI_ELEMENTS.BUTTONSMUTE);
-    public static BufferedImage btnMuteImage = buttonsMuteAssets.get(0);
-    public static BufferedImage btnUnMuteImage = buttonsMuteAssets.get(1);
 
     public UIButton(State parent, float x, float y, int width, int height, ArrayList<BufferedImage> images, ActionListener clicker) {
         super(parent, x, y, width, height);
@@ -66,7 +60,7 @@ public class UIButton extends UIObject {
         g.drawImage(currentImage, (int) x, (int) y, (int) currentDimension.getWidth(), (int) currentDimension.getHeight(), null);
 
         if (text != null)
-            drawString(g, currentText, textX, textY, true, Color.white, new Font(Font.SANS_SERIF, Font.PLAIN, 8));
+            drawString(g, currentText, textX, textY, true, Color.white, new Font(Font.SANS_SERIF, Font.PLAIN, (int) (currentDimension.width * 0.05f)));
 
     }
 

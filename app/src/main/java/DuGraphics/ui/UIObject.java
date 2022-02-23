@@ -94,6 +94,11 @@ public abstract class UIObject {
 		return new Dimension((int) stringBounds.getWidth(), (int) stringBounds.getHeight());
 	}
 
+	public void setCoords(float x, float y) {
+		this.x = x;
+		this.y = y;
+	}
+
 	public float getX() {
 		return x;
 	}
@@ -132,6 +137,17 @@ public abstract class UIObject {
 
 	public void setHovering(boolean hovering) {
 		this.hovering = hovering;
+	}
+
+	public void updateBounds(Rectangle newBounds) {
+		this.bounds = newBounds;
+	}
+
+	public void updateCoordsBounds(Rectangle newValue) {
+		setCoords(newValue.x, newValue.y);
+		updateBounds(newValue);
+		setWidth(newValue.width);
+		setHeight(newValue.height);
 	}
 
 	public static float getRelativeHeight(UIObject uiObject) {

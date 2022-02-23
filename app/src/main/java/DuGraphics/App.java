@@ -81,6 +81,14 @@ public class App implements Runnable, DisplayController {
         }
     }
 
+    @Override
+    public void onResize(Dimension newDimensions) {
+        this.windowSize = newDimensions;
+
+        if (State.getCurrentState() != null)
+            State.getCurrentState().resizeComponents();
+    }
+
     private void update() {
         // Set mouse and key listeners
         keyManager.update();
@@ -98,6 +106,8 @@ public class App implements Runnable, DisplayController {
         }
 
         g = bs.getDrawGraphics();
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g.clearRect(0, 0, windowSize.width, windowSize.height);
         g.drawImage(background, 0, 0, windowSize.width, windowSize.height, null);
 
