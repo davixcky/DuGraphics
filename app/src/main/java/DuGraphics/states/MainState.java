@@ -17,12 +17,14 @@ public class MainState extends State {
     private int red, green, blue;
     private int opacity = 0;
     private boolean increase = true;
-    private UIButton multiplayerBtn, settingsBtn, sourceCodeBtn, exitBtn;
+    private UIButton treeVisualizerBtn, settingsBtn, sourceCodeBtn, exitBtn;
 
     private Dimension titleDimensions;
 
+    public static final String STATE_NAME = "MAIN_STATE";
+
     public MainState(Handler handler) {
-        super(handler);
+        super(STATE_NAME, handler);
 
         random = new Random();
         currentDimension = handler.boardDimensions();
@@ -42,7 +44,11 @@ public class MainState extends State {
 
     @Override
     protected void initComponents() {
-        multiplayerBtn = StaticElements.multiplayerBtn(this, handler, 0, 0);
+        treeVisualizerBtn = new UIButton(this, 0, 0, UIButton.btnImage, () -> {
+            State.goTo(TreeState.STATE_NAME);
+        });
+        treeVisualizerBtn.setText("TREE VISUALIZER");
+
         settingsBtn = StaticElements.settingsBtn(this, handler, 0, 0);
         exitBtn = StaticElements.exitBtn(this, handler, 0, 0);
         sourceCodeBtn = new UIButton(this, 0, 0, UIButton.btnImage, () -> {
@@ -53,9 +59,8 @@ public class MainState extends State {
             }
         });
         sourceCodeBtn.setText("CODEBASE");
-        sourceCodeBtn.setHover(UIButton.btnHoverImager, "OPEN GITHUB");
 
-        uiManager.addObjects(multiplayerBtn, settingsBtn, sourceCodeBtn, exitBtn);
+        uiManager.addObjects(treeVisualizerBtn, settingsBtn, sourceCodeBtn, exitBtn);
 
         resizeComponents();
     }
@@ -109,8 +114,8 @@ public class MainState extends State {
         int x = getDynamicX(width);
         int y = getDynamicY(height);
 
-        multiplayerBtn.updateCoordsBounds(new Rectangle(x, y, width, height));
-        settingsBtn.updateCoordsBounds(new Rectangle(x, (int) UIButton.getRelativeHeight(multiplayerBtn), width, height));
+        treeVisualizerBtn.updateCoordsBounds(new Rectangle(x, y, width, height));
+        settingsBtn.updateCoordsBounds(new Rectangle(x, (int) UIButton.getRelativeHeight(treeVisualizerBtn), width, height));
         sourceCodeBtn.updateCoordsBounds(new Rectangle(x, (int) UIButton.getRelativeHeight(settingsBtn), width, height));
         exitBtn.updateCoordsBounds(new Rectangle(x, (int) UIButton.getRelativeHeight(sourceCodeBtn), width, height));
     }

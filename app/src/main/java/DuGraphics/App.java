@@ -11,6 +11,7 @@ import DuGraphics.input.KeyManager;
 import DuGraphics.input.MouseManager;
 import DuGraphics.states.MainState;
 import DuGraphics.states.State;
+import DuGraphics.states.TreeState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,6 +21,8 @@ public class App implements Runnable, DisplayController {
 
     public static final int TICKSPERS = 120;
     public static final boolean ISFRAMECAPPED = false;
+    private final KeyManager keyManager;
+    private final MouseManager mouseManager;
     public int ticks;
     private boolean running = false;
     private Thread gameThread;
@@ -27,10 +30,10 @@ public class App implements Runnable, DisplayController {
     private Graphics g;
     private Display display;
     private Dimension windowSize = new Dimension(1080, 720);
-    private final KeyManager keyManager;
-    private final MouseManager mouseManager;
-    private MainState mainState;
     private Image background;
+
+    private MainState mainState;
+    private TreeState treeState;
 
     public App() {
         Assets.init();
@@ -50,11 +53,15 @@ public class App implements Runnable, DisplayController {
         display.getGameCanvas().addMouseWheelListener(mouseManager);
         display.getFrame().addMouseWheelListener(mouseManager);
 
-        mainState = new MainState(new Handler(this));
-
+        initStates();
         changeBackground("/backgrounds/background_12.jpg");
 
-        State.setCurrentState(mainState);
+        State.goTo(MainState.STATE_NAME);
+    }
+
+    private void initStates() {
+        mainState = new MainState(new Handler(this));
+        treeState = new TreeState(new Handler(this));
     }
 
     public synchronized void start() {

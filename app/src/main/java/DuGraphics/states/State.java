@@ -5,6 +5,7 @@ import DuGraphics.Handler;
 import DuGraphics.ui.UIManager;
 
 import java.awt.*;
+import java.util.HashMap;
 
 public abstract class State {
 
@@ -15,10 +16,15 @@ public abstract class State {
 
     protected Dimension currentDimension;
 
-    public State(Handler handler) {
+    private static final HashMap<String, State> statesRouting = new HashMap<>();
+
+    public State(String key, Handler handler) {
         this.handler = handler;
 
         uiManager = new UIManager();
+        statesRouting.put(key, this);
+
+        System.out.printf("STATE: Registering a new state %s\n", key);
     }
 
     public static State getCurrentState() {
@@ -59,6 +65,16 @@ public abstract class State {
     public void updateDimensions(Dimension newDimensions) {
         currentDimension = newDimensions;
         resizeComponents();
+    }
+
+    public static void goTo(String stateKey) {
+        if (!statesRouting.containsKey(stateKey)) {
+            throw new RuntimeException("the state " + stateKey + " is not defined");
+        }
+
+        System.out.printf("STATE: Moving to %s\n", stateKey);
+        State nextState = statesRouting.get(stateKey);
+        setCurrentState(nextState);
     }
 
     protected abstract void initComponents();

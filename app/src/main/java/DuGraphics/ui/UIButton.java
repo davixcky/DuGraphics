@@ -13,7 +13,7 @@ public class UIButton extends UIObject {
 
     private static final ArrayList<BufferedImage> buttonsAssets = Assets.getUiComponents(Assets.UI_ELEMENTS.BUTTONS);
     public static BufferedImage btnImage = buttonsAssets.get(0);
-    public static BufferedImage btnHoverImager = buttonsAssets.get(3);
+    public static BufferedImage btnHoverImage = buttonsAssets.get(3);
     private final ArrayList<BufferedImage> images;
     private final ActionListener clicker;
     private String text = null;
@@ -33,7 +33,7 @@ public class UIButton extends UIObject {
         super(parent, x, y, image.getWidth(), image.getHeight());
 
         images = new ArrayList<>();
-        images.add(image);
+        images.add(UIButton.btnHoverImage);
         images.add(image);
 
         this.width = image.getWidth();
@@ -90,12 +90,16 @@ public class UIButton extends UIObject {
 
     public void setText(String text) {
         this.text = text;
+
+        if (hoverText == null)
+            hoverText = text;
     }
 
-    public void setHover(BufferedImage hoverImage, String hoverText) {
-        setHoverImage(hoverImage);
-
+    public void setHoverText(String hoverText) {
         this.hoverText = hoverText;
+
+        if (text == null)
+            text = hoverText;
     }
 
     public void setSize(Dimension size) {
