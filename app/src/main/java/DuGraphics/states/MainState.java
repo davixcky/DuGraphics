@@ -26,6 +26,7 @@ public class MainState extends State {
 
         random = new Random();
         red = green = blue = 255;
+        currentDimension = handler.boardDimensions();
     }
 
     private int getDynamicX(int width) {
@@ -97,7 +98,7 @@ public class MainState extends State {
     }
 
     @Override
-    public void resizeComponents() {
+    protected void resizeComponents() {
         // Update buttons dimensions if change
         int width = 40 + (int) (handler.boardDimensions().width * 0.3f);
         int height = 20 + (int) (handler.boardDimensions().height * 0.03f);

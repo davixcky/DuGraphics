@@ -18,24 +18,19 @@ import java.awt.image.BufferStrategy;
 
 public class App implements Runnable, DisplayController {
 
+    public static final int TICKSPERS = 120;
+    public static final boolean ISFRAMECAPPED = false;
+    public int ticks;
     private boolean running = false;
     private Thread gameThread;
-
     private BufferStrategy bs;
     private Graphics g;
     private Display display;
     private Dimension windowSize = new Dimension(1080, 720);
-
-    private KeyManager keyManager;
-    private MouseManager mouseManager;
-
+    private final KeyManager keyManager;
+    private final MouseManager mouseManager;
     private MainState mainState;
-
     private Image background;
-
-    public static final int TICKSPERS = 120;
-    public static final boolean ISFRAMECAPPED = false;
-    public int ticks;
 
     public App() {
         Assets.init();
@@ -92,7 +87,7 @@ public class App implements Runnable, DisplayController {
         this.windowSize = newDimensions;
 
         if (State.getCurrentState() != null)
-            State.getCurrentState().resizeComponents();
+            State.getCurrentState().updateDimensions(newDimensions);
     }
 
     private void update() {
@@ -129,29 +124,29 @@ public class App implements Runnable, DisplayController {
     public void run() {
         init();
         long lastTime = System.nanoTime();
-        double nsPerTick = 1000000000D/TICKSPERS;
+        double nsPerTick = 1000000000D / TICKSPERS;
         ticks = 0;
         long fpsTimer = System.currentTimeMillis();
         double delta = 0;
         boolean shouldRender;
-        while(running){
+        while (running) {
             shouldRender = !ISFRAMECAPPED;
             long now = System.nanoTime();
             delta += (now - lastTime) / nsPerTick;
             lastTime = now;
 
-            while(delta >= 1 ){
+            while (delta >= 1) {
                 ticks++;
                 update();
                 delta -= 1;
                 shouldRender = true;
             }
 
-            if (shouldRender){
+            if (shouldRender) {
                 render();
             }
 
-            if (fpsTimer < System.currentTimeMillis() - 1000){
+            if (fpsTimer < System.currentTimeMillis() - 1000) {
                 ticks = 0;
                 fpsTimer = System.currentTimeMillis();
             }

@@ -13,10 +13,16 @@ public abstract class State {
     protected Handler handler;
     protected UIManager uiManager;
 
+    protected Dimension currentDimension;
+
     public State(Handler handler) {
         this.handler = handler;
 
         uiManager = new UIManager();
+    }
+
+    public static State getCurrentState() {
+        return currentState;
     }
 
     public static void setCurrentState(State state) {
@@ -37,10 +43,6 @@ public abstract class State {
         return uiManager;
     }
 
-    public static State getCurrentState() {
-        return currentState;
-    }
-
     protected void start() {
         initComponents();
     }
@@ -50,8 +52,20 @@ public abstract class State {
             System.out.println("Stopping " + currentState);
     }
 
+    public Dimension getDimension() {
+        return currentDimension;
+    }
+
+    public void updateDimensions(Dimension newDimensions) {
+        currentDimension = newDimensions;
+        resizeComponents();
+    }
+
     protected abstract void initComponents();
+
     public abstract void update();
+
     public abstract void render(Graphics g);
-    public abstract void resizeComponents();
+
+    protected abstract void resizeComponents();
 }
