@@ -34,5 +34,5 @@ testing {
 
 application {
     // Define the main class for the application.
-    mainClass.set("DuGraphics.App")
+    mainClass.set("DuGraphics.Launcher")
 }

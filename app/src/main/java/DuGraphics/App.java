@@ -3,12 +3,153 @@
  */
 package DuGraphics;
 
-public class App {
-    public String getGreeting() {
-        return "Hello World!";
+import DuGraphics.gfx.Assets;
+import DuGraphics.gfx.ContentLoader;
+import DuGraphics.graphics.Display;
+import DuGraphics.graphics.DisplayController;
+import DuGraphics.input.KeyManager;
+import DuGraphics.input.MouseManager;
+import DuGraphics.states.MainState;
+import DuGraphics.states.State;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferStrategy;
+
+public class App implements Runnable, DisplayController {
+
+    private boolean running = false;
+    private Thread gameThread;
+
+    private BufferStrategy bs;
+    private Graphics g;
+    private Display display;
+    private Dimension windowSize = new Dimension(1080, 720);
+
+    private KeyManager keyManager;
+    private MouseManager mouseManager;
+
+    private MainState mainState;
+
+    private Image background;
+
+    public App() {
+        Assets.init();
+
+        keyManager = new KeyManager();
+        mouseManager = new MouseManager();
     }
 
-    public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+    private void init() {
+        display = new Display(this, "My app", windowSize);
+        display.getFrame().addKeyListener(keyManager);
+        display.getGameCanvas().addKeyListener(keyManager);
+        display.getFrame().addMouseListener(mouseManager);
+        display.getFrame().addMouseMotionListener(mouseManager);
+        display.getGameCanvas().addMouseListener(mouseManager);
+        display.getGameCanvas().addMouseMotionListener(mouseManager);
+        display.getGameCanvas().addMouseWheelListener(mouseManager);
+        display.getFrame().addMouseWheelListener(mouseManager);
+
+        mainState = new MainState(new Handler(this));
+
+        changeBackground("/backgrounds/background_2.png");
+
+        State.setCurrentState(mainState);
+    }
+
+    public synchronized void start() {
+        // Exit if the app is already running
+        if (running)
+            return;
+
+        running = true;
+        gameThread = new Thread(this);
+        gameThread.start();
+    }
+
+    public synchronized void stop() {
+        // Exit if the game is not running
+        if (!running)
+            return;
+
+        running = false;
+        try {
+            gameThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void update() {
+        // Set mouse and key listeners
+        keyManager.update();
+
+        if (State.getCurrentState() != null)
+            State.getCurrentState().update();
+
+    }
+
+    private void render() {
+        bs = display.getGameCanvas().getBufferStrategy();
+        if (bs == null) {
+            display.getGameCanvas().createBufferStrategy(3);
+            return;
+        }
+
+        g = bs.getDrawGraphics();
+        g.clearRect(0, 0, windowSize.width, windowSize.height);
+        g.drawImage(background, 0, 0, windowSize.width, windowSize.height, null);
+
+        if (State.getCurrentState() != null)
+            State.getCurrentState().render(g);
+
+        bs.show();
+        g.dispose();
+    }
+
+
+    @Override
+    public void run() {
+        init();
+        int fps = 60;
+        double timePerTick = 1000000000 / fps;
+        double delta = 0;
+        long now;
+        long lastTime = System.nanoTime();
+        long timer = 0;
+
+        while (running) {
+            now = System.nanoTime();
+            delta += (now - lastTime) / timePerTick;
+            timer += now - lastTime;
+            lastTime = now;
+
+            if (delta >= 1) {
+                update();
+                render();
+                delta--;
+            }
+
+            if (timer >= 1000000000) {
+                timer = 0;
+            }
+        }
+    }
+
+    public Dimension getWindowSize() {
+        return windowSize;
+    }
+
+    public void changeBackground(String path) {
+        background = new ImageIcon(ContentLoader.loadImage(path)).getImage();
+    }
+
+    public MouseManager getMouseManager() {
+        return mouseManager;
+    }
+
+    public KeyManager getKeyManager() {
+        return keyManager;
     }
 }
