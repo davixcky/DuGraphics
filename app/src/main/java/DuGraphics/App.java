@@ -53,7 +53,7 @@ public class App implements Runnable, DisplayController {
 
         mainState = new MainState(new Handler(this));
 
-        changeBackground("/backgrounds/background_2.png");
+        changeBackground("/backgrounds/background_12.jpg");
 
         State.setCurrentState(mainState);
     }
