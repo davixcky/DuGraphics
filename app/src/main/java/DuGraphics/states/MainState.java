@@ -25,16 +25,19 @@ public class MainState extends State {
         super(handler);
 
         random = new Random();
-        red = green = blue = 255;
         currentDimension = handler.boardDimensions();
+
+        red = random.nextInt(256);
+        green = random.nextInt(256);
+        blue = random.nextInt(256);
     }
 
     private int getDynamicX(int width) {
-        return (int) (handler.boardDimensions().width * 0.5f - width / 2);
+        return (int) (currentDimension.width * 0.5f - width / 2);
     }
 
     private int getDynamicY(int height) {
-        return handler.boardDimensions().height / 2 + height;
+        return currentDimension.height / 2 + height;
     }
 
     @Override
@@ -78,21 +81,21 @@ public class MainState extends State {
     @Override
     public void render(Graphics g) {
         Color textColor = new Color(red, green, blue, opacity);
-        int y = (int) (handler.boardDimensions().width * 0.2f);
+        int y = (int) (currentDimension.width * 0.2f);
 
         titleDimensions = UIObject.drawString(g, "AAB VISUALIZER",
-                handler.boardDimensions().width / 2,
+                currentDimension.width / 2,
                 y,
                 true,
                 textColor,
-                Assets.getFont(Assets.FontsName.SPACE_MISSION, (int) (handler.boardDimensions().width * 0.1f)));
+                Assets.getFont(Assets.FontsName.SPACE_MISSION, (int) (currentDimension.width * 0.09f)));
 
         UIObject.drawString(g, "David Orozco",
-                handler.boardDimensions().width / 2,
+                currentDimension.width / 2,
                 y + (int) (titleDimensions.height * 0.5f),
                 true,
                 Color.white,
-                Assets.getFont(Assets.FontsName.SLKSCR, (int) (titleDimensions.height * 0.4f)));
+                Assets.getFont(Assets.FontsName.SLKSCR, (int) (titleDimensions.width * 0.04f)));
 
         uiManager.render(g);
     }
@@ -100,8 +103,8 @@ public class MainState extends State {
     @Override
     protected void resizeComponents() {
         // Update buttons dimensions if change
-        int width = 40 + (int) (handler.boardDimensions().width * 0.3f);
-        int height = 20 + (int) (handler.boardDimensions().height * 0.03f);
+        int width = 40 + (int) (currentDimension.width * 0.3f);
+        int height = 20 + (int) (currentDimension.height * 0.03f);
 
         int x = getDynamicX(width);
         int y = getDynamicY(height);
