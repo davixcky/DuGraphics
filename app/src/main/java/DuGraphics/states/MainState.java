@@ -39,20 +39,17 @@ public class MainState extends State {
     @Override
     protected void initComponents() {
         multiplayerBtn = StaticElements.multiplayerBtn(this, handler, 0, 0);
-
-        settingsBtn = StaticElements.settingsBtn(this, handler, 0, UIButton.getRelativeHeight(multiplayerBtn));
-
-        sourceCodeBtn = new UIButton(this, 0, UIObject.getRelativeHeight(settingsBtn), UIButton.btnImage, () -> {
+        settingsBtn = StaticElements.settingsBtn(this, handler, 0, 0);
+        exitBtn = StaticElements.exitBtn(this, handler, 0, 0);
+        sourceCodeBtn = new UIButton(this, 0, 0, UIButton.btnImage, () -> {
             try {
-                Desktop.getDesktop().browse(URI.create("https://github.com/Norte-invaders/MenuSonido"));
+                Desktop.getDesktop().browse(URI.create("https://github.com/davixcky/DuGraphics"));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
         sourceCodeBtn.setText("CODEBASE");
         sourceCodeBtn.setHover(UIButton.btnHoverImager, "OPEN GITHUB");
-
-        exitBtn = StaticElements.exitBtn(this, handler, 0, UIButton.getRelativeHeight(sourceCodeBtn));
 
         uiManager.addObjects(multiplayerBtn, settingsBtn, sourceCodeBtn, exitBtn);
 

@@ -29,34 +29,4 @@ public class StaticElements {
         return multiplayerBtn;
     }
 
-//    public static UIButton newGameBtn(State parent, Handler handler, float x, float y) {
-//        UIButton newGameBtn = new UIButton(parent, x, y, UIButton.btnImage, () -> {
-//            ((GameState) handler.getGame().gameSate).reset();
-//            try {
-//                handler.getGame().setVolume(0,handler.getGame().lastVolume);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            ((SingleplayerState) handler.getGame().singlePlayerState).resetLevel();
-//            State.setCurrentState(handler.getGame().gameSate);
-//        });
-//        newGameBtn.setText("NEW GAME");
-//        newGameBtn.setHover(UIButton.btnHoverImager, "START GAME");
-//        newGameBtn.setSize(new Dimension(105, 40));
-//
-//        return newGameBtn;
-//    }
-//
-//    public static UIButton menuBtn(State parent, Handler handler, float x, float y) {
-//        UIButton menuBtn = new UIButton(parent, x, y, UIButton.btnImage, () -> {
-//            State.setCurrentState(handler.getGame().mainState);
-//            handler.getGame().setVolume(0,handler.getGame().lastVolume);
-//        });
-//        menuBtn.setText("MENU");
-//        menuBtn.setHover(UIButton.btnHoverImager, "GO TO MAIN");
-//
-//        return menuBtn;
-//    }
-
-
 }
