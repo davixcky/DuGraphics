@@ -13,11 +13,10 @@ import java.util.Random;
 
 public class MainState extends State {
 
+    private final Random random;
     private int red, green, blue;
     private int opacity = 0;
     private boolean increase = true;
-    private final Random random;
-
     private UIButton multiplayerBtn, settingsBtn, sourceCodeBtn, exitBtn;
 
     private Dimension titleDimensions;
@@ -39,16 +38,11 @@ public class MainState extends State {
 
     @Override
     protected void initComponents() {
-        // 125 and 21 are the max values for the current sprites
-        int x = getDynamicX(105);
-        int y = getDynamicY(21);
+        multiplayerBtn = StaticElements.multiplayerBtn(this, handler, 0, 0);
 
-        multiplayerBtn = StaticElements.multiplayerBtn(this, handler, x, y);
-        multiplayerBtn.setSize(new Dimension(105, 40));
+        settingsBtn = StaticElements.settingsBtn(this, handler, 0, UIButton.getRelativeHeight(multiplayerBtn));
 
-        settingsBtn = StaticElements.settingsBtn(this, handler, x, UIButton.getRelativeHeight(multiplayerBtn));
-
-        sourceCodeBtn = new UIButton(this, x, UIObject.getRelativeHeight(settingsBtn), UIButton.btnImage, () -> {
+        sourceCodeBtn = new UIButton(this, 0, UIObject.getRelativeHeight(settingsBtn), UIButton.btnImage, () -> {
             try {
                 Desktop.getDesktop().browse(URI.create("https://github.com/Norte-invaders/MenuSonido"));
             } catch (IOException e) {
@@ -58,9 +52,11 @@ public class MainState extends State {
         sourceCodeBtn.setText("CODEBASE");
         sourceCodeBtn.setHover(UIButton.btnHoverImager, "OPEN GITHUB");
 
-        exitBtn = StaticElements.exitBtn(this, handler, x, UIButton.getRelativeHeight(sourceCodeBtn));
+        exitBtn = StaticElements.exitBtn(this, handler, 0, UIButton.getRelativeHeight(sourceCodeBtn));
 
         uiManager.addObjects(multiplayerBtn, settingsBtn, sourceCodeBtn, exitBtn);
+
+        resizeComponents();
     }
 
     @Override
