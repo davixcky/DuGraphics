@@ -33,6 +33,10 @@ public class App implements Runnable, DisplayController {
 
     private Image background;
 
+    public static final int TICKSPERS = 120;
+    public static final boolean ISFRAMECAPPED = false;
+    public int ticks;
+
     public App() {
         Assets.init();
 
@@ -75,6 +79,8 @@ public class App implements Runnable, DisplayController {
 
         running = false;
         try {
+            System.exit(0);
+            display.close();
             gameThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -122,27 +128,32 @@ public class App implements Runnable, DisplayController {
     @Override
     public void run() {
         init();
-        int fps = 60;
-        double timePerTick = 1000000000 / fps;
-        double delta = 0;
-        long now;
         long lastTime = System.nanoTime();
-        long timer = 0;
-
-        while (running) {
-            now = System.nanoTime();
-            delta += (now - lastTime) / timePerTick;
-            timer += now - lastTime;
+        double nsPerTick = 1000000000D/TICKSPERS;
+        ticks = 0;
+        long fpsTimer = System.currentTimeMillis();
+        double delta = 0;
+        boolean shouldRender;
+        while(running){
+            shouldRender = !ISFRAMECAPPED;
+            long now = System.nanoTime();
+            delta += (now - lastTime) / nsPerTick;
             lastTime = now;
 
-            if (delta >= 1) {
+            while(delta >= 1 ){
+                ticks++;
                 update();
-                render();
-                delta--;
+                delta -= 1;
+                shouldRender = true;
             }
 
-            if (timer >= 1000000000) {
-                timer = 0;
+            if (shouldRender){
+                render();
+            }
+
+            if (fpsTimer < System.currentTimeMillis() - 1000){
+                ticks = 0;
+                fpsTimer = System.currentTimeMillis();
             }
         }
     }

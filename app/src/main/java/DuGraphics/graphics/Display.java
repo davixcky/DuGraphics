@@ -46,7 +46,6 @@ public class Display {
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
                 controller.stop();
-                System.exit(0);
             }
         });
     }
