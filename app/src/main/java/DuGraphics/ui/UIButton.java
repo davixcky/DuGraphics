@@ -19,6 +19,8 @@ public class UIButton extends UIObject {
     private String text = null;
     private String hoverText = null;
     private boolean isCustomSize = false;
+    private boolean customFontSize = false;
+    private int fontSize;
     private Dimension size;
 
     public UIButton(State parent, float x, float y, int width, int height, ArrayList<BufferedImage> images, ActionListener clicker) {
@@ -53,6 +55,7 @@ public class UIButton extends UIObject {
         String currentText = hovering ? hoverText : text;
 
         Dimension currentDimension = new Dimension(width, height);
+        int currentFontSize = customFontSize ? fontSize : (int) (currentDimension.width * 0.05f);
 
         int textX = (int) (x + currentDimension.getWidth() / 2);
         int textY = (int) (y + currentDimension.getHeight() / 2);
@@ -60,7 +63,7 @@ public class UIButton extends UIObject {
         g.drawImage(currentImage, (int) x, (int) y, (int) currentDimension.getWidth(), (int) currentDimension.getHeight(), null);
 
         if (text != null)
-            drawString(g, currentText, textX, textY, true, Color.white, new Font(Font.SANS_SERIF, Font.PLAIN, (int) (currentDimension.width * 0.05f)));
+            drawString(g, currentText, textX, textY, true, Color.white, new Font(Font.SANS_SERIF, Font.PLAIN, currentFontSize));
 
     }
 
@@ -111,6 +114,11 @@ public class UIButton extends UIObject {
 
         this.width = size.width;
         this.height = size.height;
+    }
+
+    public void setFontSize(int fontSize) {
+        this.fontSize = fontSize;
+        this.customFontSize = true;
     }
 
     public void setImage(BufferedImage image) {
