@@ -56,6 +56,10 @@ public class UIManager {
 		this.objects.addAll(Arrays.asList(objects));
 	}
 
+	public void addObject(UIObject object) {
+		this.objects.add(object);
+	}
+
 	public void removeObject(UIObject o){
 		objects.remove(o);
 	}

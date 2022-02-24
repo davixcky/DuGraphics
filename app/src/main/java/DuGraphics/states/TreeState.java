@@ -4,12 +4,13 @@ import DuGraphics.Handler;
 import DuGraphics.gfx.Assets;
 import DuGraphics.services.data.BST;
 import DuGraphics.services.data.BSTNode;
-import DuGraphics.services.data.Node;
 import DuGraphics.ui.UIButton;
 import DuGraphics.ui.UIInput;
 import DuGraphics.ui.UIObject;
+import DuGraphics.ui.components.UINode;
 
 import java.awt.*;
+import java.util.HashMap;
 
 public class TreeState extends State {
 
@@ -18,20 +19,22 @@ public class TreeState extends State {
     private UIInput nodeValueInput;
     private UIButton saveNodeBtn;
 
-    private BST<Integer> bstData;
+    private final BST<Integer> bstData;
+    private final HashMap<Integer, UINode> uiNodes;
 
-    private Dimension rightColumnDimension;
+    private final Dimension rightColumnDimension;
 
     public TreeState(Handler handler) {
         super(STATE_NAME, handler);
 
         bstData = new BST<>();
         rightColumnDimension = new Dimension();
+
+        uiNodes = new HashMap<>();
     }
 
     @Override
     protected void initComponents() {
-
         nodeValueInput = new UIInput(this, 0, 0);
         nodeValueInput.setListener(this::saveValue);
         nodeValueInput.setCharLimits(1, 3);
@@ -69,7 +72,7 @@ public class TreeState extends State {
 
     @Override
     public void update() {
-
+        uiManager.update();
     }
 
     @Override
@@ -101,7 +104,14 @@ public class TreeState extends State {
         g.setColor(new Color(48, 52, 63, 255));
         g.fillRect(0, 0, currentDimension.width - rightColumnDimension.width, currentDimension.height);
 
-        paintNode(g, currentDimension.width / 2, 50, bstData.getRoot());
+        int x = currentDimension.width / 2;
+        int y = 50;
+        if (uiNodes.size() > 0) {
+            UINode rootNode = uiNodes.get(bstData.getRoot().getValue());
+            x = (int) rootNode.getX();
+            y = (int) rootNode.getY();
+        }
+        paintNode(g, x, y, bstData.getRoot());
     }
 
     private void paintNode(Graphics2D g2, int x, int y, BSTNode<Integer> node) {
@@ -111,17 +121,25 @@ public class TreeState extends State {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         if (node != null) {
             int EXTRA = bstData.internal_height(node.getRight()) * ANCHO / 2 + bstData.internal_height(node.getLeft()) * ANCHO / 2 + node.nodosCompletos(node) * ANCHO / 2;
-            g2.drawOval(x, y, DIAMETRO, DIAMETRO);
-            g2.setColor(new Color(66, 65, 105));
-            g2.fillOval(x, y, DIAMETRO, DIAMETRO);
+
+            UINode uiNode;
+            if (!uiNodes.containsKey(node.getValue())) {
+                uiNode = new UINode(this, x, y, DIAMETRO, DIAMETRO, node);
+                uiNodes.put(node.getValue(), uiNode);
+                uiManager.addObject(uiNode);
+            } else {
+                uiNode = uiNodes.get(node.getValue());
+                uiNode.updateCoordsBounds(new Rectangle(x, y, DIAMETRO, DIAMETRO));
+            }
+
+            g2.setColor(Color.white);
             if (node.getLeft() != null) {
                 g2.drawLine(x + RADIO, y + RADIO, x - ANCHO - EXTRA + RADIO, y + ANCHO + RADIO);
             }
             if (node.getRight() != null) {
                 g2.drawLine(x + RADIO, y + RADIO, x + ANCHO + EXTRA + RADIO, y + ANCHO + RADIO);
             }
-            g2.setColor(Color.white);
-            g2.drawString(node.getValue() + "", x + 12, y + 18);
+
             paintNode(g2, x - ANCHO - EXTRA, y + ANCHO, node.getLeft());
             paintNode(g2, x + ANCHO + EXTRA, y + ANCHO, node.getRight());
         }
