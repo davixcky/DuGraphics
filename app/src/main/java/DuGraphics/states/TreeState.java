@@ -2,6 +2,7 @@ package DuGraphics.states;
 
 import DuGraphics.Handler;
 import DuGraphics.gfx.Assets;
+import DuGraphics.services.data.BST;
 import DuGraphics.ui.UIButton;
 import DuGraphics.ui.UIInput;
 import DuGraphics.ui.UIObject;
@@ -15,23 +16,41 @@ public class TreeState extends State {
     private UIInput nodeValueInput;
     private UIButton saveNodeBtn;
 
+    private BST<Integer> bstData;
+
     public TreeState(Handler handler) {
         super(STATE_NAME, handler);
+
+        bstData = new BST<>();
     }
 
     @Override
     protected void initComponents() {
 
         nodeValueInput = new UIInput(this, 0, 0);
-        nodeValueInput.setListener(() -> System.out.println("valor obtenido " + nodeValueInput.getValue()));
+        nodeValueInput.setListener(this::saveValue);
         nodeValueInput.setCharLimits(1, 3);
 
-        saveNodeBtn = new UIButton(this, 0, 0, UIButton.btnImage, () -> System.out.println(nodeValueInput.getValue() + " nodo"));
+        saveNodeBtn = new UIButton(this, 0, 0, UIButton.btnImage, this::saveValue);
         saveNodeBtn.setText("SAVE");
 
         uiManager.addObjects(nodeValueInput, saveNodeBtn);
 
         resizeComponents();
+    }
+
+    private void saveValue() {
+        String literalValue = nodeValueInput.getValue();
+        int integerValue;
+        try {
+            integerValue = Integer.parseInt(literalValue);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+
+        bstData.insertNode(integerValue);
+        bstData.preorder();
     }
 
     private void createRect(Graphics2D g2) {
