@@ -3,6 +3,8 @@ package DuGraphics.states;
 import DuGraphics.Handler;
 import DuGraphics.gfx.Assets;
 import DuGraphics.services.data.BST;
+import DuGraphics.services.data.BSTNode;
+import DuGraphics.services.data.Node;
 import DuGraphics.ui.UIButton;
 import DuGraphics.ui.UIInput;
 import DuGraphics.ui.UIObject;
@@ -18,10 +20,13 @@ public class TreeState extends State {
 
     private BST<Integer> bstData;
 
+    private Dimension rightColumnDimension;
+
     public TreeState(Handler handler) {
         super(STATE_NAME, handler);
 
         bstData = new BST<>();
+        rightColumnDimension = new Dimension();
     }
 
     @Override
@@ -69,20 +74,57 @@ public class TreeState extends State {
 
     @Override
     public void render(Graphics g) {
-        if (currentDimension.width <= 729) return;
+        if (currentDimension.width <= 729) {
+            rightColumnDimension.setSize(0, 0);
+        }
 
-        createRect((Graphics2D) g);
-        int width = 40 + (int) (currentDimension.width * 0.04f);
+        paintTree((Graphics2D) g);
 
-        int containerWidth = (int) (currentDimension.width * 0.2f);
-        int x = currentDimension.width - containerWidth / 2;
-        UIObject.drawString(g, "Type node value",
-                x + width / 2 - 40,
-                40,
-                true,
-                Color.white,
-                Assets.getFont(Assets.FontsName.SPACE_MISSION, (int) (currentDimension.height * 0.03f)));
-        uiManager.render(g);
+        if (currentDimension.width > 729) {
+            createRect((Graphics2D) g);
+            int width = 40 + (int) (currentDimension.width * 0.04f);
+
+            int containerWidth = (int) (currentDimension.width * 0.2f);
+            int x = currentDimension.width - containerWidth / 2;
+            UIObject.drawString(g, "Type node value",
+                    x + width / 2 - 40,
+                    40,
+                    true,
+                    Color.white,
+                    Assets.getFont(Assets.FontsName.SPACE_MISSION, (int) (currentDimension.height * 0.03f)));
+            uiManager.render(g);
+        }
+
+    }
+
+    private void paintTree(Graphics2D g) {
+        g.setColor(new Color(48, 52, 63, 255));
+        g.fillRect(0, 0, currentDimension.width - rightColumnDimension.width, currentDimension.height);
+
+        paintNode(g, currentDimension.width / 2, 50, bstData.getRoot());
+    }
+
+    private void paintNode(Graphics2D g2, int x, int y, BSTNode<Integer> node) {
+        int DIAMETRO = 30;
+        int RADIO = DIAMETRO / 2;
+        int ANCHO = 50;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        if (node != null) {
+            int EXTRA = bstData.internal_height(node.getRight()) * ANCHO / 2 + bstData.internal_height(node.getLeft()) * ANCHO / 2 + node.nodosCompletos(node) * ANCHO / 2;
+            g2.drawOval(x, y, DIAMETRO, DIAMETRO);
+            g2.setColor(new Color(66, 65, 105));
+            g2.fillOval(x, y, DIAMETRO, DIAMETRO);
+            if (node.getLeft() != null) {
+                g2.drawLine(x + RADIO, y + RADIO, x - ANCHO - EXTRA + RADIO, y + ANCHO + RADIO);
+            }
+            if (node.getRight() != null) {
+                g2.drawLine(x + RADIO, y + RADIO, x + ANCHO + EXTRA + RADIO, y + ANCHO + RADIO);
+            }
+            g2.setColor(Color.white);
+            g2.drawString(node.getValue() + "", x + 12, y + 18);
+            paintNode(g2, x - ANCHO - EXTRA, y + ANCHO, node.getLeft());
+            paintNode(g2, x + ANCHO + EXTRA, y + ANCHO, node.getRight());
+        }
     }
 
     @Override
@@ -96,6 +138,7 @@ public class TreeState extends State {
         int x = currentDimension.width - containerWidth / 2;
         int y = 80;
 
+        rightColumnDimension.setSize(containerWidth, currentDimension.height);
         nodeValueInput.updateCoordsBounds(new Rectangle(x - width / 2, y, width, inputHeight));
         nodeValueInput.setWidth(width);
         saveNodeBtn.updateCoordsBounds(new Rectangle(x - width / 2, (int) (nodeValueInput.getY() + nodeValueInput.getHeight()), width, height));

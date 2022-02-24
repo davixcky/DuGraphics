@@ -57,4 +57,14 @@ public class BSTNode<T> extends Node<T> {
         return left == null;
     }
 
+    public int nodosCompletos(BSTNode<T> n) {
+        if (n == null) {
+            return 0;
+        } else {
+            if (n.left != null && n.right != null) {
+                return nodosCompletos(n.left) + nodosCompletos(n.right) + 1;
+            }
+            return nodosCompletos(n.left) + nodosCompletos(n.right);
+        }
+    }
 }

@@ -104,7 +104,7 @@ public class BST<T> {
         internal_inorder(node.getRight());
     }
 
-    private int internal_height(BSTNode<T> node) {
+    public int internal_height(BSTNode<T> node) {
         if (node == null) return -1;
 
         return 1 + Math.max(internal_height(node.getLeft()), internal_height(node.getRight()));
@@ -139,4 +139,9 @@ public class BST<T> {
         internal_level(node.getLeft(), i - 1, listener);
         internal_level(node.getRight(), i - 1, listener);
     }
+
+    public BSTNode<T> getRoot() {
+        return root;
+    }
+
 }
