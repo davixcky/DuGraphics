@@ -21,6 +21,7 @@ public abstract class State {
     public State(String key, Handler handler) {
         this.handler = handler;
 
+        currentDimension = handler.boardDimensions();
         uiManager = new UIManager();
         statesRouting.put(key, this);
 

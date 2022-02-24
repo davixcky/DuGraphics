@@ -27,7 +27,6 @@ public class MainState extends State {
         super(STATE_NAME, handler);
 
         random = new Random();
-        currentDimension = handler.boardDimensions();
 
         red = random.nextInt(256);
         green = random.nextInt(256);

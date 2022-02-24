@@ -13,7 +13,10 @@ public abstract class UIBufferedObject extends UIObject {
         super(parent, x, y, width, height);
 
         bufferedObject = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        create(bufferedObject.createGraphics());
+        Graphics2D g2 = bufferedObject.createGraphics();
+        create(g2);
+        g2.dispose();
+
     }
 
     protected abstract void create(Graphics2D graphics2D);
