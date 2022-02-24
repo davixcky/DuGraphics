@@ -87,6 +87,18 @@ public class UIInput extends UIObject {
         enterPressed = true;
     }
 
+    public void setCharLimits(int minChar, int maxChar) {
+        this.minChar = minChar;
+        this.maxChar = maxChar;
+    }
+
+    public String getValue() {
+        String value = text.toString();
+        enterPressed = false;
+        text.setLength(0);
+        return value;
+    }
+
     public String getText() {
         return text.toString();
     }
