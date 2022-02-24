@@ -31,7 +31,7 @@ public class UIInput extends UIObject {
     public void render(Graphics g) {
         g.drawImage(UIButton.btnImage, (int) x, (int) y, null);
         drawString(g, text.toString(),
-                (int) x + width / 2,
+                (int) x + UIButton.btnImage.getWidth() / 2,
                 (int) y + 11,
                 true,
                 Color.white,
