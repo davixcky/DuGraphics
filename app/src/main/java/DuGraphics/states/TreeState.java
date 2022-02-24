@@ -15,14 +15,12 @@ import java.util.HashMap;
 public class TreeState extends State {
 
     public static final String STATE_NAME = "TREE_STATE";
-
-    private UIInput nodeValueInput;
-    private UIButton saveNodeBtn;
-
     private final BST<Integer> bstData;
     private final HashMap<Integer, UINode> uiNodes;
-
     private final Dimension rightColumnDimension;
+    private UIInput nodeValueInput;
+    private UIButton saveNodeBtn;
+    private UINode rootNode;
 
     public TreeState(Handler handler) {
         super(STATE_NAME, handler);
@@ -31,6 +29,7 @@ public class TreeState extends State {
         rightColumnDimension = new Dimension();
 
         uiNodes = new HashMap<>();
+        rootNode = null;
     }
 
     @Override
@@ -107,7 +106,6 @@ public class TreeState extends State {
         int x = currentDimension.width / 2;
         int y = 50;
         if (uiNodes.size() > 0) {
-            UINode rootNode = uiNodes.get(bstData.getRoot().getValue());
             x = (int) rootNode.getX();
             y = (int) rootNode.getY();
         }
@@ -120,7 +118,9 @@ public class TreeState extends State {
         int ANCHO = 50;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         if (node != null) {
-            int EXTRA = bstData.internal_height(node.getRight()) * ANCHO / 2 + bstData.internal_height(node.getLeft()) * ANCHO / 2 + node.nodosCompletos(node) * ANCHO / 2;
+            int EXTRA = bstData.internal_height(node.getRight()) * ANCHO / 2
+                    + bstData.internal_height(node.getLeft()) * ANCHO / 2
+                    + node.nodosCompletos(node) * ANCHO / 2;
 
             UINode uiNode;
             if (!uiNodes.containsKey(node.getValue())) {
@@ -130,6 +130,10 @@ public class TreeState extends State {
             } else {
                 uiNode = uiNodes.get(node.getValue());
                 uiNode.updateCoordsBounds(new Rectangle(x, y, DIAMETRO, DIAMETRO));
+            }
+
+            if (rootNode == null) {
+                rootNode = uiNode;
             }
 
             g2.setColor(Color.white);

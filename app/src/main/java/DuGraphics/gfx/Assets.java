@@ -7,30 +7,7 @@ import java.util.HashMap;
 
 public class Assets {
 
-    public enum Fonts {
-        SLKSCR_100,
-        SLKSCR_10,
-    }
-
-    public enum FontsName {
-        SLKSCR,
-        SPACE_MISSION,
-        SPORT_TYPO,
-        DEBUG,
-        JOYSTIX
-    }
-
-    public enum UI_ELEMENTS {
-        BUTTONS,
-        SLIDER,
-        BUTTONS_NON_SQUARE,
-        BUTTONSMUTE,
-        ARROW_BUTTON_L,
-        ARROW_BUTTON_R,
-    }
-
     private static ArrayList<BufferedImage> backgroundAssets;
-
     private static HashMap<String, ArrayList<BufferedImage>> uiComponents;
     private static HashMap<String, Font> fonts;
     private static HashMap<String, ArrayList<BufferedImage>> background;
@@ -62,7 +39,6 @@ public class Assets {
     public static BufferedImage getArrow(UI_ELEMENTS uiElement) {
         return arrow.get(getUiString(uiElement));
     }
-
 
     public static Font getFont(Fonts font) {
         return fonts.get(getFontString(font));
@@ -104,7 +80,6 @@ public class Assets {
         return assets;
     }
 
-
     private static String getFontString(Fonts font) {
         String fontStr = "";
 
@@ -141,6 +116,29 @@ public class Assets {
         }
 
         return uiElementStr;
+    }
+
+
+    public enum Fonts {
+        SLKSCR_100,
+        SLKSCR_10,
+    }
+
+    public enum FontsName {
+        SLKSCR,
+        SPACE_MISSION,
+        SPORT_TYPO,
+        DEBUG,
+        JOYSTIX
+    }
+
+    public enum UI_ELEMENTS {
+        BUTTONS,
+        SLIDER,
+        BUTTONS_NON_SQUARE,
+        BUTTONSMUTE,
+        ARROW_BUTTON_L,
+        ARROW_BUTTON_R,
     }
 
 }
