@@ -18,8 +18,8 @@ public class TreeState extends State {
     private final BST<Integer> bstData;
     private final HashMap<Integer, UINode> uiNodes;
     private final Dimension rightColumnDimension;
-    private UIInput nodeValueInput;
-    private UIButton saveNodeBtn;
+    private UIInput nodeValueInput, levelInput;
+    private UIButton saveNodeBtn, levelSubmitBtn, backBtn;
     private UINode rootNode;
 
     public TreeState(Handler handler) {
@@ -41,9 +41,23 @@ public class TreeState extends State {
         saveNodeBtn = new UIButton(this, 0, 0, UIButton.btnImage, this::saveValue);
         saveNodeBtn.setText("SAVE");
 
-        uiManager.addObjects(nodeValueInput, saveNodeBtn);
+        levelInput = new UIInput(this, 0, 0);
+        levelInput.setCharLimits(1, 2);
+
+        levelSubmitBtn = new UIButton(this, 0, 0, UIButton.btnImage, this::handleLevel);
+        levelSubmitBtn.setText("SEARCH LEVEL");
+
+        backBtn = new UIButton(this, 30, 30, UIButton.btnImage, () -> State.goTo(MainState.STATE_NAME));
+        backBtn.setText("BACK TO HOME");
+        backBtn.updateCoordsBounds(new Rectangle(20, 20, backBtn.getWidth() + 30, backBtn.getHeight() + 10));
+
+        uiManager.addObjects(nodeValueInput, saveNodeBtn, levelInput, levelSubmitBtn, backBtn);
 
         resizeComponents();
+    }
+
+    private void handleLevel() {
+
     }
 
     private void saveValue() {
@@ -89,11 +103,19 @@ public class TreeState extends State {
             int containerWidth = (int) (currentDimension.width * 0.2f);
             int x = currentDimension.width - containerWidth / 2;
             UIObject.drawString(g, "Type node value",
-                    x + width / 2 - 40,
+                    x + width / 2 - 60,
                     40,
                     true,
                     Color.white,
-                    Assets.getFont(Assets.FontsName.SPACE_MISSION, (int) (currentDimension.height * 0.03f)));
+                    Assets.getFont(Assets.FontsName.SPACE_MISSION, (int) (rightColumnDimension.width * 0.08f)));
+
+            UIObject.drawString(g, "Type level value",
+                    x + width / 2 - 60,
+                    (int) (rightColumnDimension.height * 0.23f),
+                    true,
+                    Color.white,
+                    Assets.getFont(Assets.FontsName.SPACE_MISSION, (int) (rightColumnDimension.width * 0.08f)));
+
             uiManager.render(g);
         }
 
@@ -152,19 +174,29 @@ public class TreeState extends State {
     @Override
     protected void resizeComponents() {
         // Update buttons dimensions if change
-        int width = 40 + (int) (currentDimension.width * 0.05f);
         int height = 20 + (int) (currentDimension.height * 0.03f);
 
         int containerWidth = (int) (currentDimension.width * 0.2f);
         int inputHeight = (int) (currentDimension.height * 0.04f);
-        int x = currentDimension.width - containerWidth / 2;
-        int y = 80;
+
+        int width = (int) (containerWidth * 0.8f);
+        int y = 60;
+
+        int spacingX = (int) (containerWidth * 0.1f);
+        int initialX = currentDimension.width - containerWidth + spacingX;
 
         rightColumnDimension.setSize(containerWidth, currentDimension.height);
-        nodeValueInput.updateCoordsBounds(new Rectangle(x - width / 2, y, width, inputHeight));
+        nodeValueInput.updateCoordsBounds(new Rectangle(initialX, y, width, inputHeight));
         nodeValueInput.setWidth(width);
-        saveNodeBtn.updateCoordsBounds(new Rectangle(x - width / 2, (int) (nodeValueInput.getY() + nodeValueInput.getHeight()), width, height));
+        saveNodeBtn.updateCoordsBounds(new Rectangle(initialX, (int) (nodeValueInput.getY() + nodeValueInput.getHeight()), width, height));
+
+        y = (int) (rightColumnDimension.height * 0.25f);
+        levelInput.updateCoordsBounds(new Rectangle(initialX, y, width, inputHeight));
+        levelSubmitBtn.updateCoordsBounds(new Rectangle(initialX, (int) (levelInput.getY() + levelInput.getHeight()), width, height));
 
         saveNodeBtn.setFontSize((int) (containerWidth * 0.05f));
+        backBtn.setFontSize((int) (containerWidth * 0.05f));
+        levelSubmitBtn.setFontSize((int) (containerWidth * 0.05f));
+
     }
 }

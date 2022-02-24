@@ -76,6 +76,8 @@ public abstract class State {
         System.out.printf("STATE: Moving to %s\n", stateKey);
         State nextState = statesRouting.get(stateKey);
         setCurrentState(nextState);
+
+        // TODO: Fix resizing when switching between tabs
     }
 
     protected abstract void initComponents();
