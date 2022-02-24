@@ -45,7 +45,8 @@ public class TreeState extends State {
         try {
             integerValue = Integer.parseInt(literalValue);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(literalValue + " is not a valid integer node value");
+            // TODO: Handle literal value when is not a string
             return;
         }
 
