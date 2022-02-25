@@ -33,7 +33,7 @@ public class UINode extends UIBufferedObject {
         g2.setColor(mainColor);
         g2.fillOval(0, 0, width, height);
         g2.setColor(Color.white);
-        drawString(g2, nodeData.getValue() + "", 12, 18, false, Color.white, new Font(Font.SERIF, Font.BOLD, 14));
+        drawString(g2, nodeData.getValue() + "", width / 2, height / 2, true, Color.white, new Font(Font.SERIF, Font.BOLD, 14));
     }
 
     @Override
