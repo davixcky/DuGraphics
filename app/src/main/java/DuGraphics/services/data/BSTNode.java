@@ -1,18 +1,17 @@
 package DuGraphics.services.data;
 
-public class BSTNode<T> extends Node<T> {
-    private BSTNode<T> left, right;
+public class BSTNode extends Node<Integer> {
+    private BSTNode left, right;
 
-    public BSTNode(T value) {
+    public BSTNode(int value) {
         super(value);
         left = right = null;
     }
 
-    public void insert(T childValue) {
-        int comparisonValue = childValue.toString().compareTo(value.toString());
-        if (comparisonValue < 0) {
+    public void insert(int childValue) {
+        if (childValue < value) {
             if (isLeftNull()) {
-                left = new BSTNode<>(childValue);
+                left = new BSTNode(childValue);
                 return;
             }
 
@@ -20,9 +19,9 @@ public class BSTNode<T> extends Node<T> {
             return;
         }
 
-        if (comparisonValue > 0) {
+        if (childValue > value) {
             if (isRightNull()) {
-                right = new BSTNode<>(childValue);
+                right = new BSTNode(childValue);
                 return;
             }
 
@@ -33,19 +32,19 @@ public class BSTNode<T> extends Node<T> {
         System.out.println("value not inserted");
     }
 
-    public void setRight(BSTNode<T> node) {
+    public void setRight(BSTNode node) {
         right = node;
     }
 
-    public void setLeft(BSTNode<T> node) {
+    public void setLeft(BSTNode node) {
         left = node;
     }
 
-    public BSTNode<T> getRight() {
+    public BSTNode getRight() {
         return right;
     }
 
-    public BSTNode<T> getLeft() {
+    public BSTNode getLeft() {
         return left;
     }
 
@@ -57,7 +56,7 @@ public class BSTNode<T> extends Node<T> {
         return left == null;
     }
 
-    public int nodosCompletos(BSTNode<T> n) {
+    public int nodosCompletos(BSTNode n) {
         if (n == null) {
             return 0;
         } else {

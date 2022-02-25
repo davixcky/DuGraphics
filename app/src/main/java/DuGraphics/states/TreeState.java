@@ -20,7 +20,7 @@ public class TreeState extends State {
 
     public static final String STATE_NAME = "TREE_STATE";
 
-    private final BST<Integer> bstData;
+    private final BST bstData;
     private final HashMap<Integer, UINode> uiNodes;
     private final LinkedList<Integer> listLevel;
 
@@ -34,7 +34,7 @@ public class TreeState extends State {
     public TreeState(Handler handler) {
         super(STATE_NAME, handler);
 
-        bstData = new BST<>();
+        bstData = new BST();
         rightColumnDimension = new Dimension();
 
         uiNodes = new HashMap<>();
@@ -152,7 +152,7 @@ public class TreeState extends State {
         paintNode(g, x, y, bstData.getRoot());
     }
 
-    private void paintNode(Graphics2D g2, int x, int y, BSTNode<Integer> node) {
+    private void paintNode(Graphics2D g2, int x, int y, BSTNode node) {
         int DIAMETER = 30;
         int RADIO = DIAMETER / 2;
         int WIDTH = 50;

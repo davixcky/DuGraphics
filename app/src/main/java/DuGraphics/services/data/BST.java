@@ -1,15 +1,15 @@
 package DuGraphics.services.data;
 
-public class BST<T> {
-    private BSTNode<T> root;
+public class BST {
+    private BSTNode root;
 
     public BST() {
         root = null;
     }
 
-    public void insertNode(T nodeValue) {
+    public void insertNode(int nodeValue) {
         if (root == null) {
-            root = new BSTNode<>(nodeValue);
+            root = new BSTNode(nodeValue);
             return;
         }
 
@@ -21,7 +21,7 @@ public class BST<T> {
         print(root);
     }
 
-    private void print(BSTNode<T> node) {
+    private void print(BSTNode node) {
         if (node == null) return;
 
         System.out.println(node.getValue());
@@ -35,7 +35,7 @@ public class BST<T> {
         System.out.println();
     }
 
-    public void preorder(INodeListener<T> listener) {
+    public void preorder(INodeListener<Integer> listener) {
         System.out.print("Preorder: ");
         internal_preorder(root, listener);
         System.out.println();
@@ -67,7 +67,7 @@ public class BST<T> {
         System.out.println();
     }
 
-    public void level(int level, INodeListener<T> listener) {
+    public void level(int level, INodeListener<Integer> listener) {
         internal_level(root, level, listener);
     }
 
@@ -80,7 +80,7 @@ public class BST<T> {
         internal_deleteLeafs(root);
     }
 
-    private void internal_preorder(BSTNode<T> node, INodeListener<T> listener) {
+    private void internal_preorder(BSTNode node, INodeListener<Integer> listener) {
         if (node == null) return;
 
         listener.action(node);
@@ -88,7 +88,7 @@ public class BST<T> {
         internal_preorder(node.getRight(), listener);
     }
 
-    private void internal_postorder(BSTNode<T> node) {
+    private void internal_postorder(BSTNode node) {
         if (node == null) return;
 
         internal_postorder(node.getLeft());
@@ -96,7 +96,7 @@ public class BST<T> {
         System.out.print(node.getValue() + " ");
     }
 
-    private void internal_inorder(BSTNode<T> node) {
+    private void internal_inorder(BSTNode node) {
         if (node == null) return;
 
         internal_inorder(node.getLeft());
@@ -104,19 +104,19 @@ public class BST<T> {
         internal_inorder(node.getRight());
     }
 
-    public int internal_height(BSTNode<T> node) {
+    public int internal_height(BSTNode node) {
         if (node == null) return -1;
 
         return 1 + Math.max(internal_height(node.getLeft()), internal_height(node.getRight()));
     }
 
-    private int internal_size(BSTNode<T> node) {
+    private int internal_size(BSTNode node) {
         if (node == null) return 0;
 
         return 1 + internal_size(node.getLeft()) + internal_size(node.getRight());
     }
 
-    private BSTNode<T> internal_deleteLeafs(BSTNode<T> node) {
+    private BSTNode internal_deleteLeafs(BSTNode node) {
         if (node == null) return null;
 
         if (node.isLeftNull() && node.isRightNull()) {
@@ -128,7 +128,7 @@ public class BST<T> {
         return node;
     }
 
-    public void internal_level(BSTNode<T> node, int i, INodeListener<T> listener) {
+    public void internal_level(BSTNode node, int i, INodeListener<Integer> listener) {
         if (node == null) return;
 
         if (i == 1) {
@@ -140,7 +140,7 @@ public class BST<T> {
         internal_level(node.getRight(), i - 1, listener);
     }
 
-    public BSTNode<T> getRoot() {
+    public BSTNode getRoot() {
         return root;
     }
 
