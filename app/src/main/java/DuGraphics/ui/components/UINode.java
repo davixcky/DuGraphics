@@ -15,6 +15,7 @@ public class UINode extends UIBufferedObject {
     private int currentStatus;
 
     private Color mainColor;
+    private boolean isUncle;
 
     public UINode(State parent, float x, float y, int width, int height, BSTNode node) {
         super(parent, x, y, width, height);
@@ -30,9 +31,19 @@ public class UINode extends UIBufferedObject {
 
     @Override
     protected void create(Graphics2D g2) {
+        g2.clearRect(0, 0, width, height);
+        g2.setColor(new Color(48, 52, 63, 255));
+        g2.fillRect(0, 0, width, height);
         g2.setColor(mainColor);
         g2.fillOval(0, 0, width, height);
         g2.setColor(Color.white);
+
+        if (isUncle) {
+            Stroke prevStroke = g2.getStroke();
+            g2.setStroke(new BasicStroke(4));
+            g2.drawOval(0, 0, width, height);
+            g2.setStroke(prevStroke);
+        }
         drawString(g2, nodeData.getValue() + "", width / 2, height / 2, true, Color.white, new Font(Font.SERIF, Font.BOLD, 14));
     }
 
@@ -66,5 +77,9 @@ public class UINode extends UIBufferedObject {
 
     @Override
     public void onObjectKeyPressed(KeyEvent e) {
+    }
+
+    public void setUncle(boolean isUncle) {
+        this.isUncle = isUncle;
     }
 }

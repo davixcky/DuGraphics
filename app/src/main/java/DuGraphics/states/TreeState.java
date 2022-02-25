@@ -28,6 +28,7 @@ public class TreeState extends State {
     private UINode rootNode;
     private boolean deletingTree = false;
     private int currentIndexDeletion = 0; // Max index per deletion is 150
+    private int currentUncle = -1;
 
     public TreeState(Handler handler) {
         super(STATE_NAME, handler);
@@ -103,6 +104,7 @@ public class TreeState extends State {
     private void searchUncle() {
         int uncle = bstData.getUncle(nodeValueInput.getValueAsInteger());
         System.out.println(uncle);
+        currentUncle = uncle;
     }
 
     private void createRect(Graphics2D g2) {
@@ -216,6 +218,11 @@ public class TreeState extends State {
                 uiManager.addObject(uiNode);
             } else {
                 uiNode = uiNodes.get(node.getValue());
+
+                uiNode.setUncle(false);
+                if (currentUncle != -1 && node.getValue() == currentUncle) {
+                    uiNode.setUncle(true);
+                }
                 uiNode.updateCoordsBounds(new Rectangle(x, y, DIAMETER, DIAMETER));
             }
 
