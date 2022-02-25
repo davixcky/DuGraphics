@@ -157,6 +157,20 @@ public class TreeState extends State {
                     Color.white,
                     Assets.getFont(Assets.FontsName.SPACE_MISSION, (int) (rightColumnDimension.width * 0.08f)));
 
+            UIObject.drawString(g, bstData.size() + " size",
+                    x + width / 2 - 60,
+                    (int) (rightColumnDimension.height * 0.8f),
+                    true,
+                    Color.white,
+                    Assets.getFont(Assets.FontsName.SLKSCR, (int) (rightColumnDimension.width * 0.08f)));
+
+            UIObject.drawString(g, bstData.height() + "# levels",
+                    x + width / 2 - 60,
+                    (int) (rightColumnDimension.height * 0.85f),
+                    true,
+                    Color.white,
+                    Assets.getFont(Assets.FontsName.SLKSCR, (int) (rightColumnDimension.width * 0.08f)));
+
             uiManager.render(g);
 
             levelNodes.forEach(node -> node.render(g));
