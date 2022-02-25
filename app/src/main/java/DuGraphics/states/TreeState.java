@@ -4,6 +4,8 @@ import DuGraphics.Handler;
 import DuGraphics.gfx.Assets;
 import DuGraphics.services.data.BST;
 import DuGraphics.services.data.BSTNode;
+import DuGraphics.services.data.LinkedList;
+import DuGraphics.services.data.ListNode;
 import DuGraphics.ui.UIButton;
 import DuGraphics.ui.UIInput;
 import DuGraphics.ui.UIObject;
@@ -15,12 +17,17 @@ import java.util.HashMap;
 public class TreeState extends State {
 
     public static final String STATE_NAME = "TREE_STATE";
+
     private final BST<Integer> bstData;
     private final HashMap<Integer, UINode> uiNodes;
+    private final LinkedList<Integer> listLevel;
+
     private final Dimension rightColumnDimension;
     private UIInput nodeValueInput, levelInput;
     private UIButton saveNodeBtn, levelSubmitBtn, backBtn;
     private UINode rootNode;
+
+
 
     public TreeState(Handler handler) {
         super(STATE_NAME, handler);
@@ -29,6 +36,7 @@ public class TreeState extends State {
         rightColumnDimension = new Dimension();
 
         uiNodes = new HashMap<>();
+        listLevel = new LinkedList<>();
         rootNode = null;
     }
 
@@ -42,6 +50,7 @@ public class TreeState extends State {
         saveNodeBtn.setText("SAVE");
 
         levelInput = new UIInput(this, 0, 0);
+        levelInput.setListener(this::handleLevel);
         levelInput.setCharLimits(1, 2);
 
         levelSubmitBtn = new UIButton(this, 0, 0, UIButton.btnImage, this::handleLevel);
@@ -57,21 +66,20 @@ public class TreeState extends State {
     }
 
     private void handleLevel() {
+        int level = levelInput.getValueAsInteger();
 
+        System.out.println(bstData.height() + " height");
+        listLevel.reset();
+        bstData.level(level, (node) -> listLevel.insert(node.getValue()));
+
+        for (ListNode<Integer> n: listLevel) {
+            System.out.print(n.getValue() + " ");
+        }
+        System.out.println();
     }
 
     private void saveValue() {
-        String literalValue = nodeValueInput.getValue();
-        int integerValue;
-        try {
-            integerValue = Integer.parseInt(literalValue);
-        } catch (Exception e) {
-            System.out.println(literalValue + " is not a valid integer node value");
-            // TODO: Handle literal value when is not a string
-            return;
-        }
-
-        bstData.insertNode(integerValue);
+        bstData.insertNode(nodeValueInput.getValueAsInteger());
         bstData.preorder();
     }
 

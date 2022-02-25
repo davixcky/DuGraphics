@@ -99,6 +99,19 @@ public class UIInput extends UIObject {
         return value;
     }
 
+    public int getValueAsInteger() {
+        String literalValue = getValue();
+        int integerValue = -1;
+        try {
+            integerValue = Integer.parseInt(literalValue);
+        } catch (Exception e) {
+            System.out.println(literalValue + " is not a valid integer input value");
+            // TODO: Handle literal value when is not a string
+        }
+
+        return integerValue;
+    }
+
     public String getText() {
         return text.toString();
     }
