@@ -58,7 +58,7 @@ public class TreeState extends State {
         levelSubmitBtn.setText("SEARCH LEVEL");
 
         clearTreeBtn = new UIButton(this, 0, 0, UIButton.btnImage, this::clearTree);
-        clearTreeBtn.setText("CLEAR TEXT");
+        clearTreeBtn.setText("CLEAR TREE");
 
         backBtn = new UIButton(this, 30, 30, UIButton.btnImage, () -> State.goTo(MainState.STATE_NAME));
         backBtn.setText("BACK TO HOME");
