@@ -24,7 +24,7 @@ public class TreeState extends State {
     private final Dimension rightColumnDimension;
     private final ArrayList<UIBox> levelNodes;
     private UIInput nodeValueInput, levelInput;
-    private UIButton saveNodeBtn, levelSubmitBtn, backBtn, clearTreeBtn;
+    private UIButton saveNodeBtn, levelSubmitBtn, backBtn, clearTreeBtn, searchUncleBtn;
     private UINode rootNode;
     private boolean deletingTree = false;
     private int currentIndexDeletion = 0; // Max index per deletion is 150
@@ -50,6 +50,9 @@ public class TreeState extends State {
         saveNodeBtn = new UIButton(this, 0, 0, UIButton.btnImage, this::saveValue);
         saveNodeBtn.setText("SAVE");
 
+        searchUncleBtn = new UIButton(this, 0, 0, UIButton.btnImage, this::searchUncle);
+        searchUncleBtn.setText("SEARCH UNCLE");
+
         levelInput = new UIInput(this, 0, 0);
         levelInput.setListener(this::handleLevel);
         levelInput.setCharLimits(1, 2);
@@ -64,7 +67,7 @@ public class TreeState extends State {
         backBtn.setText("BACK TO HOME");
         backBtn.updateCoordsBounds(new Rectangle(20, 20, backBtn.getWidth() + 30, backBtn.getHeight() + 10));
 
-        uiManager.addObjects(nodeValueInput, saveNodeBtn, levelInput, levelSubmitBtn, clearTreeBtn, backBtn);
+        uiManager.addObjects(nodeValueInput, saveNodeBtn, levelInput, levelSubmitBtn, clearTreeBtn, backBtn, searchUncleBtn);
 
         resizeComponents();
     }
@@ -95,6 +98,11 @@ public class TreeState extends State {
     private void saveValue() {
         bstData.insertNode(nodeValueInput.getValueAsInteger());
         bstData.preorder();
+    }
+
+    private void searchUncle() {
+        int uncle = bstData.getUncle(nodeValueInput.getValueAsInteger());
+        System.out.println(uncle);
     }
 
     private void createRect(Graphics2D g2) {
@@ -152,7 +160,7 @@ public class TreeState extends State {
 
             UIObject.drawString(g, "Type level value",
                     x + width / 2 - 60,
-                    (int) (rightColumnDimension.height * 0.23f),
+                    (int) (rightColumnDimension.height * 0.3f),
                     true,
                     Color.white,
                     Assets.getFont(Assets.FontsName.SPACE_MISSION, (int) (rightColumnDimension.width * 0.08f)));
@@ -246,16 +254,19 @@ public class TreeState extends State {
         nodeValueInput.updateCoordsBounds(new Rectangle(initialX, y, width, inputHeight));
         nodeValueInput.setWidth(width);
         saveNodeBtn.updateCoordsBounds(new Rectangle(initialX, (int) (nodeValueInput.getY() + nodeValueInput.getHeight()), width, height));
+        searchUncleBtn.updateCoordsBounds(new Rectangle(initialX, (int) UIObject.getRelativeHeight(saveNodeBtn), width, height));
 
-        y = (int) (rightColumnDimension.height * 0.25f);
+        y = (int) (rightColumnDimension.height * 0.32f);
         levelInput.updateCoordsBounds(new Rectangle(initialX, y, width, inputHeight));
         levelSubmitBtn.updateCoordsBounds(new Rectangle(initialX, (int) (levelInput.getY() + levelInput.getHeight()), width, height));
         clearTreeBtn.updateCoordsBounds(new Rectangle(initialX, (int) UIObject.getRelativeHeight(levelSubmitBtn), width, height));
 
-        saveNodeBtn.setFontSize((int) (containerWidth * 0.05f));
-        backBtn.setFontSize((int) (containerWidth * 0.05f));
-        levelSubmitBtn.setFontSize((int) (containerWidth * 0.05f));
-        clearTreeBtn.setFontSize((int) (containerWidth * 0.05f));
+        int fontSize = (int) (containerWidth * 0.05f);
+        saveNodeBtn.setFontSize(fontSize);
+        searchUncleBtn.setFontSize(fontSize);
+        backBtn.setFontSize(fontSize);
+        levelSubmitBtn.setFontSize(fontSize);
+        clearTreeBtn.setFontSize(fontSize);
 
     }
 }

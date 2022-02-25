@@ -71,6 +71,41 @@ public class BST {
         internal_level(root, level, listener);
     }
 
+    public int getUncle(int value) {
+        int parent = getParent(root, value, -1);
+        if (parent == -1) {
+            return -1;
+        }
+
+        BSTNode siblingParent = getSibling(root, parent);
+        if (siblingParent == null) return -1;
+
+        return siblingParent.value;
+    }
+
+    private int getParent(BSTNode node, int value, int parent) {
+        if (node == null) return -1 ;
+
+        if (node.value == value) return parent;
+
+        int left = getParent(node.getLeft(), value, node.value);
+        int right = getParent(node.getRight(), value, node.value);
+
+        return left != -1 ? left : right;
+    }
+
+    private BSTNode getSibling(BSTNode node, int value) {
+        if (node == null || node.value == value) return null;
+
+        if (!node.isLeftNull() && node.getLeft().value == value) return node.getRight();
+        if (!node.isRightNull() && node.getRight().value == value) return node.getLeft();
+
+        BSTNode temp = getSibling(node.getLeft(), value);
+        if (temp != null) return temp;
+
+        return getSibling(node.getRight(), value);
+    }
+
     public void deleteLeafs() {
         if (root != null && root.isRightNull() && root.isLeftNull()) {
             System.out.println("root value: " + root.value);
