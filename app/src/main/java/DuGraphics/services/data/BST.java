@@ -73,11 +73,22 @@ public class BST {
 
     public void deleteLeafs() {
         if (root != null && root.isRightNull() && root.isLeftNull()) {
+            System.out.println("root value: " + root.value);
             root = null;
             return;
         }
 
-        internal_deleteLeafs(root);
+        internal_deleteLeafs(root, (node) -> System.out.println("deleting node " + node.getValue()));
+    }
+
+    public void deleteLeafs(INodeListener<Integer> listener) {
+        if (root != null && root.isRightNull() && root.isLeftNull()) {
+            listener.action(root);
+            root = null;
+            return;
+        }
+
+        internal_deleteLeafs(root, listener);
     }
 
     private void internal_preorder(BSTNode node, INodeListener<Integer> listener) {
@@ -116,15 +127,15 @@ public class BST {
         return 1 + internal_size(node.getLeft()) + internal_size(node.getRight());
     }
 
-    private BSTNode internal_deleteLeafs(BSTNode node) {
+    private BSTNode internal_deleteLeafs(BSTNode node, INodeListener<Integer> listener) {
         if (node == null) return null;
 
         if (node.isLeftNull() && node.isRightNull()) {
-            System.out.println("Deleting " + node.getValue());
+            listener.action(node);
             return null;
         }
-        node.setLeft(internal_deleteLeafs(node.getLeft()));
-        node.setRight(internal_deleteLeafs(node.getRight()));
+        node.setLeft(internal_deleteLeafs(node.getLeft(), listener));
+        node.setRight(internal_deleteLeafs(node.getRight(), listener));
         return node;
     }
 

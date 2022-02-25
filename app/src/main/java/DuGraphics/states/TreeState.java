@@ -2,10 +2,7 @@ package DuGraphics.states;
 
 import DuGraphics.Handler;
 import DuGraphics.gfx.Assets;
-import DuGraphics.services.data.BST;
-import DuGraphics.services.data.BSTNode;
-import DuGraphics.services.data.LinkedList;
-import DuGraphics.services.data.ListNode;
+import DuGraphics.services.data.*;
 import DuGraphics.ui.UIButton;
 import DuGraphics.ui.UIInput;
 import DuGraphics.ui.UIObject;
@@ -25,11 +22,12 @@ public class TreeState extends State {
     private final LinkedList<Integer> listLevel;
 
     private final Dimension rightColumnDimension;
-    private UIInput nodeValueInput, levelInput;
-    private UIButton saveNodeBtn, levelSubmitBtn, backBtn;
-    private UINode rootNode;
-
     private final ArrayList<UIBox> levelNodes;
+    private UIInput nodeValueInput, levelInput;
+    private UIButton saveNodeBtn, levelSubmitBtn, backBtn, clearTreeBtn;
+    private UINode rootNode;
+    private boolean deletingTree = false;
+    private int currentIndexDeletion = 0; // Max index per deletion is 150
 
     public TreeState(Handler handler) {
         super(STATE_NAME, handler);
@@ -59,13 +57,21 @@ public class TreeState extends State {
         levelSubmitBtn = new UIButton(this, 0, 0, UIButton.btnImage, this::handleLevel);
         levelSubmitBtn.setText("SEARCH LEVEL");
 
+        clearTreeBtn = new UIButton(this, 0, 0, UIButton.btnImage, this::clearTree);
+        clearTreeBtn.setText("CLEAR TEXT");
+
         backBtn = new UIButton(this, 30, 30, UIButton.btnImage, () -> State.goTo(MainState.STATE_NAME));
         backBtn.setText("BACK TO HOME");
         backBtn.updateCoordsBounds(new Rectangle(20, 20, backBtn.getWidth() + 30, backBtn.getHeight() + 10));
 
-        uiManager.addObjects(nodeValueInput, saveNodeBtn, levelInput, levelSubmitBtn, backBtn);
+        uiManager.addObjects(nodeValueInput, saveNodeBtn, levelInput, levelSubmitBtn, clearTreeBtn, backBtn);
 
         resizeComponents();
+    }
+
+    private void clearTree() {
+        deletingTree = true;
+        currentIndexDeletion = 0;
     }
 
     private void handleLevel() {
@@ -102,7 +108,26 @@ public class TreeState extends State {
     @Override
     public void update() {
         uiManager.update();
+
+        if (deletingTree) {
+            currentIndexDeletion++;
+
+            if (currentIndexDeletion >= 150) {
+                bstData.deleteLeafs(this::deleteNode);
+                currentIndexDeletion = 0;
+            }
+            if (bstData.size() == 0) {
+                deletingTree = false;
+            }
+        }
     }
+
+    private void deleteNode(Node<Integer> integerNode) {
+        UIObject obj = uiNodes.get(integerNode.getValue());
+        uiNodes.remove(integerNode.getValue());
+        uiManager.removeObject(obj);
+    }
+
 
     @Override
     public void render(Graphics g) {
@@ -211,10 +236,12 @@ public class TreeState extends State {
         y = (int) (rightColumnDimension.height * 0.25f);
         levelInput.updateCoordsBounds(new Rectangle(initialX, y, width, inputHeight));
         levelSubmitBtn.updateCoordsBounds(new Rectangle(initialX, (int) (levelInput.getY() + levelInput.getHeight()), width, height));
+        clearTreeBtn.updateCoordsBounds(new Rectangle(initialX, (int) UIObject.getRelativeHeight(levelSubmitBtn), width, height));
 
         saveNodeBtn.setFontSize((int) (containerWidth * 0.05f));
         backBtn.setFontSize((int) (containerWidth * 0.05f));
         levelSubmitBtn.setFontSize((int) (containerWidth * 0.05f));
+        clearTreeBtn.setFontSize((int) (containerWidth * 0.05f));
 
     }
 }
