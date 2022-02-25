@@ -25,6 +25,7 @@ public class LinkedList<T> implements Iterable<ListNode<T>> {
 
     public void reset() {
         head = tail = null;
+        length = 0;
     }
 
     @Override

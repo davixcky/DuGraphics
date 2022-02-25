@@ -9,9 +9,11 @@ import DuGraphics.services.data.ListNode;
 import DuGraphics.ui.UIButton;
 import DuGraphics.ui.UIInput;
 import DuGraphics.ui.UIObject;
+import DuGraphics.ui.components.UIBox;
 import DuGraphics.ui.components.UINode;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TreeState extends State {
@@ -27,7 +29,7 @@ public class TreeState extends State {
     private UIButton saveNodeBtn, levelSubmitBtn, backBtn;
     private UINode rootNode;
 
-
+    private final ArrayList<UIBox> levelNodes;
 
     public TreeState(Handler handler) {
         super(STATE_NAME, handler);
@@ -37,6 +39,7 @@ public class TreeState extends State {
 
         uiNodes = new HashMap<>();
         listLevel = new LinkedList<>();
+        levelNodes = new ArrayList<>();
         rootNode = null;
     }
 
@@ -68,14 +71,19 @@ public class TreeState extends State {
     private void handleLevel() {
         int level = levelInput.getValueAsInteger();
 
-        System.out.println(bstData.height() + " height");
+        levelNodes.clear();
         listLevel.reset();
+
         bstData.level(level, (node) -> listLevel.insert(node.getValue()));
 
-        for (ListNode<Integer> n: listLevel) {
-            System.out.print(n.getValue() + " ");
+        int x = 20;
+        int y = (int) (currentDimension.height * 0.6f);
+
+        for (ListNode<Integer> integerListNode : listLevel) {
+            UIBox box = new UIBox(this, x, y, 30, 30, Color.blue, String.valueOf(integerListNode.getValue()));
+            levelNodes.add(box);
+            x += 50;
         }
-        System.out.println();
     }
 
     private void saveValue() {
@@ -125,6 +133,8 @@ public class TreeState extends State {
                     Assets.getFont(Assets.FontsName.SPACE_MISSION, (int) (rightColumnDimension.width * 0.08f)));
 
             uiManager.render(g);
+
+            levelNodes.forEach(node -> node.render(g));
         }
 
     }
@@ -143,23 +153,23 @@ public class TreeState extends State {
     }
 
     private void paintNode(Graphics2D g2, int x, int y, BSTNode<Integer> node) {
-        int DIAMETRO = 30;
-        int RADIO = DIAMETRO / 2;
-        int ANCHO = 50;
+        int DIAMETER = 30;
+        int RADIO = DIAMETER / 2;
+        int WIDTH = 50;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         if (node != null) {
-            int EXTRA = bstData.internal_height(node.getRight()) * ANCHO / 2
-                    + bstData.internal_height(node.getLeft()) * ANCHO / 2
-                    + node.nodosCompletos(node) * ANCHO / 2;
+            int EXTRA = bstData.internal_height(node.getRight()) * WIDTH / 2
+                    + bstData.internal_height(node.getLeft()) * WIDTH / 2
+                    + node.nodosCompletos(node) * WIDTH / 2;
 
             UINode uiNode;
             if (!uiNodes.containsKey(node.getValue())) {
-                uiNode = new UINode(this, x, y, DIAMETRO, DIAMETRO, node);
+                uiNode = new UINode(this, x, y, DIAMETER, DIAMETER, node);
                 uiNodes.put(node.getValue(), uiNode);
                 uiManager.addObject(uiNode);
             } else {
                 uiNode = uiNodes.get(node.getValue());
-                uiNode.updateCoordsBounds(new Rectangle(x, y, DIAMETRO, DIAMETRO));
+                uiNode.updateCoordsBounds(new Rectangle(x, y, DIAMETER, DIAMETER));
             }
 
             if (rootNode == null) {
@@ -168,14 +178,14 @@ public class TreeState extends State {
 
             g2.setColor(Color.white);
             if (node.getLeft() != null) {
-                g2.drawLine(x + RADIO, y + RADIO, x - ANCHO - EXTRA + RADIO, y + ANCHO + RADIO);
+                g2.drawLine(x + RADIO, y + RADIO, x - WIDTH - EXTRA + RADIO, y + WIDTH + RADIO);
             }
             if (node.getRight() != null) {
-                g2.drawLine(x + RADIO, y + RADIO, x + ANCHO + EXTRA + RADIO, y + ANCHO + RADIO);
+                g2.drawLine(x + RADIO, y + RADIO, x + WIDTH + EXTRA + RADIO, y + WIDTH + RADIO);
             }
 
-            paintNode(g2, x - ANCHO - EXTRA, y + ANCHO, node.getLeft());
-            paintNode(g2, x + ANCHO + EXTRA, y + ANCHO, node.getRight());
+            paintNode(g2, x - WIDTH - EXTRA, y + WIDTH, node.getLeft());
+            paintNode(g2, x + WIDTH + EXTRA, y + WIDTH, node.getRight());
         }
     }
 
