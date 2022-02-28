@@ -2,15 +2,16 @@ package DuGraphics.states;
 
 import DuGraphics.Handler;
 import DuGraphics.gfx.Assets;
-import DuGraphics.services.data.*;
+import DuGraphics.services.data.BST;
+import DuGraphics.services.data.BSTNode;
+import DuGraphics.services.data.Node;
 import DuGraphics.ui.UIButton;
 import DuGraphics.ui.UIInput;
 import DuGraphics.ui.UIObject;
-import DuGraphics.ui.components.UIBox;
+import DuGraphics.ui.components.UIBoxList;
 import DuGraphics.ui.components.UINode;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TreeState extends State {
@@ -19,16 +20,16 @@ public class TreeState extends State {
 
     private final BST bstData;
     private final HashMap<Integer, UINode> uiNodes;
-    private final LinkedList<Integer> listLevel;
 
     private final Dimension rightColumnDimension;
-    private final ArrayList<UIBox> levelNodes;
     private UIInput nodeValueInput, levelInput;
     private UIButton saveNodeBtn, levelSubmitBtn, backBtn, clearTreeBtn, searchUncleBtn;
     private UINode rootNode;
     private boolean deletingTree = false;
     private int currentIndexDeletion = 0; // Max index per deletion is 150
     private int currentUncle = -1;
+
+    private UIBoxList boxList;
 
     public TreeState(Handler handler) {
         super(STATE_NAME, handler);
@@ -37,8 +38,6 @@ public class TreeState extends State {
         rightColumnDimension = new Dimension();
 
         uiNodes = new HashMap<>();
-        listLevel = new LinkedList<>();
-        levelNodes = new ArrayList<>();
         rootNode = null;
     }
 
@@ -68,32 +67,35 @@ public class TreeState extends State {
         backBtn.setText("BACK TO HOME");
         backBtn.updateCoordsBounds(new Rectangle(20, 20, backBtn.getWidth() + 30, backBtn.getHeight() + 10));
 
-        uiManager.addObjects(nodeValueInput, saveNodeBtn, levelInput, levelSubmitBtn, clearTreeBtn, backBtn, searchUncleBtn);
+        boxList = new UIBoxList(
+                this,
+                20, (int) (currentDimension.height * 0.7f),
+                currentDimension.width - rightColumnDimension.width - 20,
+                currentDimension.height
+        );
 
         resizeComponents();
+
+
+
+        uiManager.addObjects(nodeValueInput, saveNodeBtn, levelInput, levelSubmitBtn, clearTreeBtn, backBtn, searchUncleBtn, boxList);
     }
 
     private void clearTree() {
         deletingTree = true;
         currentIndexDeletion = 0;
+        boxList.reset();
     }
 
     private void handleLevel() {
         int level = levelInput.getValueAsInteger();
 
-        levelNodes.clear();
-        listLevel.reset();
+        boxList.reset();
+        bstData.level(level, (node) -> {
+            boxList.addNode(node.getValue());
+        });
 
-        bstData.level(level, (node) -> listLevel.insert(node.getValue()));
-
-        int x = 20;
-        int y = (int) (currentDimension.height * 0.6f);
-
-        for (ListNode<Integer> integerListNode : listLevel) {
-            UIBox box = new UIBox(this, x, y, 30, 30, Color.blue, String.valueOf(integerListNode.getValue()));
-            levelNodes.add(box);
-            x += 50;
-        }
+        boxList.setTitle("Values of level #" + level);
     }
 
     private void saveValue() {
@@ -182,8 +184,6 @@ public class TreeState extends State {
                     Assets.getFont(Assets.FontsName.SLKSCR, (int) (rightColumnDimension.width * 0.08f)));
 
             uiManager.render(g);
-
-            levelNodes.forEach(node -> node.render(g));
         }
 
     }
@@ -267,6 +267,13 @@ public class TreeState extends State {
         levelInput.updateCoordsBounds(new Rectangle(initialX, y, width, inputHeight));
         levelSubmitBtn.updateCoordsBounds(new Rectangle(initialX, (int) (levelInput.getY() + levelInput.getHeight()), width, height));
         clearTreeBtn.updateCoordsBounds(new Rectangle(initialX, (int) UIObject.getRelativeHeight(levelSubmitBtn), width, height));
+
+        boxList.updateCoordsBounds(new Rectangle(
+                20,
+                (int) (currentDimension.height * 0.7f),
+                currentDimension.width - rightColumnDimension.width - 60,
+                currentDimension.height
+        ));
 
         int fontSize = (int) (containerWidth * 0.05f);
         saveNodeBtn.setFontSize(fontSize);
