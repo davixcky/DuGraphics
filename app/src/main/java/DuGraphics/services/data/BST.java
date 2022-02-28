@@ -47,9 +47,21 @@ public class BST {
         System.out.println();
     }
 
+    public void postorder(INodeListener<Integer> listener) {
+        System.out.print("Postorder: ");
+        internal_postorder(root, listener);
+        System.out.println();
+    }
+
     public void inorder() {
         System.out.print("Inorder: ");
         internal_inorder(root);
+        System.out.println();
+    }
+
+    public void inorder(INodeListener<Integer> listener) {
+        System.out.print("Inorder: ");
+        internal_inorder(root, listener);
         System.out.println();
     }
 
@@ -142,12 +154,28 @@ public class BST {
         System.out.print(node.getValue() + " ");
     }
 
+    private void internal_postorder(BSTNode node, INodeListener<Integer> listener) {
+        if (node == null) return;
+
+        internal_postorder(node.getLeft(), listener);
+        internal_postorder(node.getRight(), listener);
+        listener.action(node);
+    }
+
     private void internal_inorder(BSTNode node) {
         if (node == null) return;
 
         internal_inorder(node.getLeft());
         System.out.print(node.getValue() + " ");
         internal_inorder(node.getRight());
+    }
+
+    private void internal_inorder(BSTNode node, INodeListener<Integer> listener) {
+        if (node == null) return;
+
+        internal_inorder(node.getLeft(), listener);
+        listener.action(node);
+        internal_inorder(node.getRight(), listener);
     }
 
     public int internal_height(BSTNode node) {

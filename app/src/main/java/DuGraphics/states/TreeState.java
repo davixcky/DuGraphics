@@ -23,13 +23,25 @@ public class TreeState extends State {
 
     private final Dimension rightColumnDimension;
     private UIInput nodeValueInput, levelInput;
-    private UIButton saveNodeBtn, levelSubmitBtn, backBtn, clearTreeBtn, searchUncleBtn;
+    private UIButton
+            saveNodeBtn,
+            levelSubmitBtn,
+            backBtn,
+            clearTreeBtn,
+            searchUncleBtn,
+            preorderBtn,
+            postorderBtn,
+            inorderBtn;
     private UINode rootNode;
     private boolean deletingTree = false;
     private int currentIndexDeletion = 0; // Max index per deletion is 150
     private int currentUncle = -1;
 
     private UIBoxList boxList;
+
+    private String currentListType = "LEVEL";
+    private int currentLevel = 1;
+    private boolean shouldUpdate = false;
 
     public TreeState(Handler handler) {
         super(STATE_NAME, handler);
@@ -67,6 +79,15 @@ public class TreeState extends State {
         backBtn.setText("BACK TO HOME");
         backBtn.updateCoordsBounds(new Rectangle(20, 20, backBtn.getWidth() + 30, backBtn.getHeight() + 10));
 
+        preorderBtn = new UIButton(this, 0, 0, UIButton.btnImage, this::handlePreorder);
+        preorderBtn.setText("PREORDER");
+
+        postorderBtn = new UIButton(this, 0, 0, UIButton.btnImage, this::handlePostorder);
+        postorderBtn.setText("POSTORDER");
+
+        inorderBtn = new UIButton(this, 0, 0, UIButton.btnImage, this::handleInorder);
+        inorderBtn.setText("INORDER");
+
         boxList = new UIBoxList(
                 this,
                 20, (int) (currentDimension.height * 0.7f),
@@ -76,9 +97,55 @@ public class TreeState extends State {
 
         resizeComponents();
 
+        uiManager.addObjects(
+                nodeValueInput,
+                saveNodeBtn,
+                levelInput,
+                levelSubmitBtn,
+                clearTreeBtn,
+                backBtn,
+                searchUncleBtn,
+                boxList,
+                preorderBtn,
+                postorderBtn,
+                inorderBtn
+        );
+    }
 
+    private void calculateListValues() {
+        System.out.println("Should update");
+        System.out.println(currentListType);
 
-        uiManager.addObjects(nodeValueInput, saveNodeBtn, levelInput, levelSubmitBtn, clearTreeBtn, backBtn, searchUncleBtn, boxList);
+        boxList.reset();
+        boxList.setTitle(currentListType);
+        switch (currentListType) {
+            case "LEVEL" -> {
+                bstData.level(currentLevel, (node) -> {
+                    boxList.addNode(node.getValue());
+                });
+                boxList.setTitle("Values of level #" + currentLevel);
+            }
+            case "PREORDER" -> bstData.preorder((node) -> boxList.addNode(node.getValue()));
+            case "POSTORDER" -> bstData.postorder((node) -> boxList.addNode(node.getValue()));
+            case "INORDER" -> bstData.inorder((node) -> boxList.addNode(node.getValue()));
+        }
+
+        shouldUpdate = false;
+    }
+
+    private void handlePreorder() {
+        currentListType = "PREORDER";
+        shouldUpdate = true;
+    }
+
+    private void handlePostorder() {
+        currentListType = "POSTORDER";
+        shouldUpdate = true;
+    }
+
+    private void handleInorder() {
+        currentListType = "INORDER";
+        shouldUpdate = true;
     }
 
     private void clearTree() {
@@ -88,17 +155,13 @@ public class TreeState extends State {
     }
 
     private void handleLevel() {
-        int level = levelInput.getValueAsInteger();
-
-        boxList.reset();
-        bstData.level(level, (node) -> {
-            boxList.addNode(node.getValue());
-        });
-
-        boxList.setTitle("Values of level #" + level);
+        currentLevel= levelInput.getValueAsInteger();
+        currentListType = "LEVEL";
+        shouldUpdate = true;
     }
 
     private void saveValue() {
+        shouldUpdate = true;
         bstData.insertNode(nodeValueInput.getValueAsInteger());
         bstData.preorder();
     }
@@ -120,6 +183,9 @@ public class TreeState extends State {
     @Override
     public void update() {
         uiManager.update();
+
+        if (shouldUpdate)
+            calculateListValues();
 
         if (deletingTree) {
             currentIndexDeletion++;
@@ -268,6 +334,10 @@ public class TreeState extends State {
         levelSubmitBtn.updateCoordsBounds(new Rectangle(initialX, (int) (levelInput.getY() + levelInput.getHeight()), width, height));
         clearTreeBtn.updateCoordsBounds(new Rectangle(initialX, (int) UIObject.getRelativeHeight(levelSubmitBtn), width, height));
 
+        preorderBtn.updateCoordsBounds(new Rectangle(initialX, (int) (UIObject.getRelativeHeight(clearTreeBtn) + 20), width, height));
+        postorderBtn.updateCoordsBounds(new Rectangle(initialX, (int) UIObject.getRelativeHeight(preorderBtn), width, height));
+        inorderBtn.updateCoordsBounds(new Rectangle(initialX, (int) UIObject.getRelativeHeight(postorderBtn), width, height));
+
         boxList.updateCoordsBounds(new Rectangle(
                 20,
                 (int) (currentDimension.height * 0.7f),
@@ -281,6 +351,7 @@ public class TreeState extends State {
         backBtn.setFontSize(fontSize);
         levelSubmitBtn.setFontSize(fontSize);
         clearTreeBtn.setFontSize(fontSize);
+        preorderBtn.setFontSize(fontSize);
 
     }
 }
