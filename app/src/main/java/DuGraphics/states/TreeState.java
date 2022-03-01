@@ -75,7 +75,10 @@ public class TreeState extends State {
         clearTreeBtn = new UIButton(this, 0, 0, UIButton.btnImage, this::clearTree);
         clearTreeBtn.setText("CLEAR TREE");
 
-        backBtn = new UIButton(this, 30, 30, UIButton.btnImage, () -> State.goTo(MainState.STATE_NAME));
+        backBtn = new UIButton(this, 30, 30, UIButton.btnImage, () -> {
+            State.goTo(MainState.STATE_NAME);
+            State.getCurrentState().updateDimensions(currentDimension);
+        });
         backBtn.setText("BACK TO HOME");
         backBtn.updateCoordsBounds(new Rectangle(20, 20, backBtn.getWidth() + 30, backBtn.getHeight() + 10));
 
@@ -281,7 +284,6 @@ public class TreeState extends State {
             if (!uiNodes.containsKey(node.getValue())) {
                 uiNode = new UINode(this, x, y, DIAMETER, DIAMETER, node);
                 uiNodes.put(node.getValue(), uiNode);
-                uiManager.addObject(uiNode);
             } else {
                 uiNode = uiNodes.get(node.getValue());
 
@@ -291,6 +293,8 @@ public class TreeState extends State {
                 }
                 uiNode.updateCoordsBounds(new Rectangle(x, y, DIAMETER, DIAMETER));
             }
+
+            uiManager.addObject(uiNode);
 
             if (rootNode == null) {
                 rootNode = uiNode;

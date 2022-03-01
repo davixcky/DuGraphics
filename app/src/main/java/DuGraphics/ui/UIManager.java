@@ -57,6 +57,7 @@ public class UIManager {
 	}
 
 	public void addObject(UIObject object) {
+		if (this.objects.contains(object)) return;
 		this.objects.add(object);
 	}
 

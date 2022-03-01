@@ -45,6 +45,7 @@ public class MainState extends State {
     protected void initComponents() {
         treeVisualizerBtn = new UIButton(this, 0, 0, UIButton.btnImage, () -> {
             State.goTo(TreeState.STATE_NAME);
+            State.getCurrentState().updateDimensions(currentDimension);
         });
         treeVisualizerBtn.setText("TREE VISUALIZER");
 

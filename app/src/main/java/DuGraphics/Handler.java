@@ -6,7 +6,6 @@ public class Handler {
 
     private App app;
 
-
     public Handler(App app) {
         this.app = app;
     }

@@ -13,7 +13,7 @@ public class StaticElements {
     }
 
     public static UIButton exitBtn(State parent, Handler handler, float x, float y) {
-        UIButton exitBtn = new UIButton(parent, x, y, UIButton.btnImage, () -> System.out.println("Exit button pressed"));
+        UIButton exitBtn = new UIButton(parent, x, y, UIButton.btnImage, () -> System.exit(0));
         exitBtn.setText("EXIT");
         exitBtn.setHoverText("CLOSE APP");
 
