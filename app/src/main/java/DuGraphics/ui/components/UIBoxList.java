@@ -1,24 +1,24 @@
 package DuGraphics.ui.components;
 
 import DuGraphics.gfx.Assets;
+import DuGraphics.services.data.LinkedList.LinkedList;
 import DuGraphics.states.State;
 import DuGraphics.ui.UIObject;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 
 public class UIBoxList extends UIBufferedObject {
 
-    private final ArrayList<Integer> boxes;
+    private final LinkedList<Integer> boxes;
     private String title;
 
     public UIBoxList(State parent, float x, float y, int width, int height) {
         super(parent, x, y, width, height);
 
         title = "";
-        boxes = new ArrayList<>();
+        boxes = new LinkedList<>();
 
         init();
     }

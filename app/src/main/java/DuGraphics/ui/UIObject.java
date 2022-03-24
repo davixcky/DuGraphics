@@ -153,4 +153,12 @@ public abstract class UIObject {
 	public static float getRelativeHeight(UIObject uiObject) {
 		return uiObject.getY() + uiObject.getHeight() + 10;
 	}
+
+	@Override
+	public String toString() {
+		return "UIObject{" +
+				"x=" + x +
+				", y=" + y +
+				'}';
+	}
 }

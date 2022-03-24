@@ -1,20 +1,20 @@
 package DuGraphics.ui;
 
 import DuGraphics.gfx.Assets;
+import DuGraphics.services.data.LinkedList.LinkedList;
 import DuGraphics.states.State;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 public class UIButton extends UIObject {
 
-    private static final ArrayList<BufferedImage> buttonsAssets = Assets.getUiComponents(Assets.UI_ELEMENTS.BUTTONS);
+    private static final LinkedList<BufferedImage> buttonsAssets = Assets.getUiComponents(Assets.UI_ELEMENTS.BUTTONS);
     public static BufferedImage btnImage = buttonsAssets.get(0);
     public static BufferedImage btnHoverImage = buttonsAssets.get(3);
-    private final ArrayList<BufferedImage> images;
+    private final LinkedList<BufferedImage> images;
     private final ActionListener clicker;
     private String text = null;
     private String hoverText = null;
@@ -23,7 +23,7 @@ public class UIButton extends UIObject {
     private int fontSize;
     private Dimension size;
 
-    public UIButton(State parent, float x, float y, int width, int height, ArrayList<BufferedImage> images, ActionListener clicker) {
+    public UIButton(State parent, float x, float y, int width, int height, LinkedList<BufferedImage> images, ActionListener clicker) {
         super(parent, x, y, width, height);
         this.images = images;
         this.clicker = clicker;
@@ -34,7 +34,7 @@ public class UIButton extends UIObject {
     public UIButton(State parent, float x, float y, BufferedImage image, ActionListener clicker) {
         super(parent, x, y, image.getWidth(), image.getHeight());
 
-        images = new ArrayList<>();
+        images = new LinkedList<>();
         images.add(UIButton.btnHoverImage);
         images.add(image);
 

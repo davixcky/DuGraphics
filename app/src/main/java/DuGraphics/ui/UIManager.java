@@ -1,19 +1,20 @@
 package DuGraphics.ui;
 
+import DuGraphics.services.data.LinkedList.LinkedList;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class UIManager {
 
-	private ArrayList<UIObject> objects;
+	private LinkedList<UIObject> objects;
 
 	private UIObject focusedElement = null;
 
 	public UIManager(){
-		objects = new ArrayList<UIObject>();
+		objects = new LinkedList<UIObject>();
 	}
 	
 	public void update(){
@@ -65,11 +66,11 @@ public class UIManager {
 		objects.remove(o);
 	}
 
-	public ArrayList<UIObject> getObjects() {
+	public LinkedList<UIObject> getObjects() {
 		return objects;
 	}
 
-	public void setObjects(ArrayList<UIObject> objects) {
+	public void setObjects(LinkedList<UIObject> objects) {
 		this.objects = objects;
 	}
 
