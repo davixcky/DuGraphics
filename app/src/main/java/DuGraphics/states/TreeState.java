@@ -2,9 +2,9 @@ package DuGraphics.states;
 
 import DuGraphics.Handler;
 import DuGraphics.gfx.Assets;
-import DuGraphics.services.data.BST;
-import DuGraphics.services.data.BSTNode;
-import DuGraphics.services.data.Node;
+import DuGraphics.services.data.common.Node;
+import DuGraphics.services.data.tree.BST;
+import DuGraphics.services.data.tree.BSTNode;
 import DuGraphics.ui.UIButton;
 import DuGraphics.ui.UIInput;
 import DuGraphics.ui.UIObject;
@@ -158,7 +158,7 @@ public class TreeState extends State {
     }
 
     private void handleLevel() {
-        currentLevel= levelInput.getValueAsInteger();
+        currentLevel = levelInput.getValueAsInteger();
         currentListType = "LEVEL";
         shouldUpdate = true;
     }
