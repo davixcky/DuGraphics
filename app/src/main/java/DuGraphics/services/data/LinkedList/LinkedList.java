@@ -2,7 +2,7 @@ package DuGraphics.services.data.LinkedList;
 
 import java.util.Iterator;
 
-public class LinkedList<T> implements Iterable<ListNode<T>> {
+public class LinkedList<T> implements Iterable<T> {
     ListNode<T> head, tail;
     int length;
 
@@ -23,13 +23,21 @@ public class LinkedList<T> implements Iterable<ListNode<T>> {
         tail = newNode;
     }
 
+    public void add(T value) {
+        insert(value);
+    }
+
+    public void clear() {
+        reset();
+    }
+
     public void reset() {
         head = tail = null;
         length = 0;
     }
 
     @Override
-    public Iterator<ListNode<T>> iterator() {
+    public Iterator<T> iterator() {
 
         return new Iterator<>() {
             private ListNode<T> currentNode = head;
@@ -40,10 +48,10 @@ public class LinkedList<T> implements Iterable<ListNode<T>> {
             }
 
             @Override
-            public ListNode<T> next() {
+            public T next() {
                 ListNode<T> tmp = currentNode;
                 currentNode = currentNode.getNext();
-                return tmp;
+                return tmp.getValue();
             }
 
             @Override
