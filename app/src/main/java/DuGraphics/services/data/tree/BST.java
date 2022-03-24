@@ -1,4 +1,6 @@
-package DuGraphics.services.data;
+package DuGraphics.services.data.tree;
+
+import DuGraphics.services.data.common.INodeListener;
 
 public class BST {
     private BSTNode root;
@@ -92,25 +94,25 @@ public class BST {
         BSTNode siblingParent = getSibling(root, parent);
         if (siblingParent == null) return -1;
 
-        return siblingParent.value;
+        return siblingParent.getValue();
     }
 
     private int getParent(BSTNode node, int value, int parent) {
         if (node == null) return -1;
 
-        if (node.value == value) return parent;
+        if (node.getValue() == value) return parent;
 
-        int left = getParent(node.getLeft(), value, node.value);
-        int right = getParent(node.getRight(), value, node.value);
+        int left = getParent(node.getLeft(), value, node.getValue());
+        int right = getParent(node.getRight(), value, node.getValue());
 
         return left != -1 ? left : right;
     }
 
     private BSTNode getSibling(BSTNode node, int value) {
-        if (node == null || node.value == value) return null;
+        if (node == null || node.getValue() == value) return null;
 
-        if (!node.isLeftNull() && node.getLeft().value == value) return node.getRight();
-        if (!node.isRightNull() && node.getRight().value == value) return node.getLeft();
+        if (!node.isLeftNull() && node.getLeft().getValue() == value) return node.getRight();
+        if (!node.isRightNull() && node.getRight().getValue() == value) return node.getLeft();
 
         BSTNode temp = getSibling(node.getLeft(), value);
         if (temp != null) return temp;
@@ -120,7 +122,7 @@ public class BST {
 
     public void deleteLeafs() {
         if (root != null && root.isRightNull() && root.isLeftNull()) {
-            System.out.println("root value: " + root.value);
+            System.out.println("root value: " + root.getValue());
             root = null;
             return;
         }
@@ -221,7 +223,7 @@ public class BST {
     private void internal_printBranch(BSTNode root) {
         if (root == null) return;
 
-        System.out.println(root.value);
+        System.out.println(root.getValue());
 
         int leftHeight = internal_height(root.getLeft());
         int rightHeight = internal_height(root.getRight());

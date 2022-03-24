@@ -1,4 +1,6 @@
-package DuGraphics.services.data;
+package DuGraphics.services.data.tree;
+
+import DuGraphics.services.data.common.Node;
 
 public class BSTNode extends Node<Integer> {
     private BSTNode left, right;

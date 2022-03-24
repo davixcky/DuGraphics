@@ -1,6 +1,8 @@
-package DuGraphics.services.data;
+package DuGraphics.services.data.LinkedList;
 
-public class ListNode<T> extends Node<T>{
+import DuGraphics.services.data.common.Node;
+
+public class ListNode<T> extends Node<T> {
     ListNode<T> next;
 
     public ListNode(T value) {

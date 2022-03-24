@@ -1,7 +1,7 @@
-package DuGraphics.services.data;
+package DuGraphics.services.data.common;
 
 public abstract class Node<T> {
-    T value;
+    protected T value;
 
     public Node(T value) {
         this.value = value;

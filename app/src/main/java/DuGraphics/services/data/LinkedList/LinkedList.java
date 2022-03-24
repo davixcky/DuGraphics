@@ -1,4 +1,4 @@
-package DuGraphics.services.data;
+package DuGraphics.services.data.LinkedList;
 
 import java.util.Iterator;
 
