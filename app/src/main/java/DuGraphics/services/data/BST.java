@@ -96,7 +96,7 @@ public class BST {
     }
 
     private int getParent(BSTNode node, int value, int parent) {
-        if (node == null) return -1 ;
+        if (node == null) return -1;
 
         if (node.value == value) return parent;
 
@@ -214,6 +214,22 @@ public class BST {
         internal_level(node.getRight(), i - 1, listener);
     }
 
+    public void printBranch() {
+        internal_printBranch(root);
+    }
+
+    private void internal_printBranch(BSTNode root) {
+        if (root == null) return;
+
+        System.out.println(root.value);
+
+        int leftHeight = internal_height(root.getLeft());
+        int rightHeight = internal_height(root.getRight());
+
+        internal_printBranch(leftHeight >= rightHeight ? root.getLeft() : root.getRight());
+    }
+
+    // TODO: Remove this public modifier and mark as deprecated
     public BSTNode getRoot() {
         return root;
     }
