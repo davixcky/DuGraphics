@@ -106,14 +106,25 @@ public class LinkedList<T> implements Iterable<T> {
         node.setValue(value);
     }
 
+    public int size() {
+        return length;
+    }
+
     public boolean contains(Object o) {
+        return indexOf(o) != -1;
+    }
+
+    public int indexOf(Object o) {
+        int index = 0;
         for (T node: this) {
             if (node.equals(o)) {
-                return true;
+                return index;
             }
+
+            index++;
         }
 
-        return false;
+        return -1;
     }
 
     @Override
