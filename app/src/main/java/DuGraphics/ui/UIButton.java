@@ -31,6 +31,14 @@ public class UIButton extends UIObject {
         size = new Dimension(width, height);
     }
 
+    public UIButton(State parent, ActionListener clicker) {
+        this(parent, 0, 0, btnImage, clicker);
+    }
+
+    public UIButton(State parent, float x, float y, ActionListener clicker) {
+        this(parent, x, y, btnImage, clicker);
+    }
+
     public UIButton(State parent, float x, float y, BufferedImage image, ActionListener clicker) {
         super(parent, x, y, image.getWidth(), image.getHeight());
 

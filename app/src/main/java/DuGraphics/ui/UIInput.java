@@ -23,6 +23,10 @@ public class UIInput extends UIObject {
         maxChar = 10;
     }
 
+    public UIInput(State parent) {
+        this(parent, 0, 0);
+    }
+
     @Override
     public void update() {
     }

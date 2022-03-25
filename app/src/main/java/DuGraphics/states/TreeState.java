@@ -64,40 +64,40 @@ public class TreeState extends State {
 
     @Override
     protected void initComponents() {
-        nodeValueInput = new UIInput(this, 0, 0);
+        nodeValueInput = new UIInput(this);
         nodeValueInput.setListener(this::saveValue);
         nodeValueInput.setCharLimits(1, 3);
 
-        saveNodeBtn = new UIButton(this, 0, 0, UIButton.btnImage, this::saveValue);
+        saveNodeBtn = new UIButton(this, this::saveValue);
         saveNodeBtn.setText("SAVE");
 
-        searchUncleBtn = new UIButton(this, 0, 0, UIButton.btnImage, this::searchUncle);
+        searchUncleBtn = new UIButton(this, this::searchUncle);
         searchUncleBtn.setText("SEARCH UNCLE");
 
-        levelInput = new UIInput(this, 0, 0);
+        levelInput = new UIInput(this);
         levelInput.setListener(this::handleLevel);
         levelInput.setCharLimits(1, 2);
 
-        levelSubmitBtn = new UIButton(this, 0, 0, UIButton.btnImage, this::handleLevel);
+        levelSubmitBtn = new UIButton(this, this::handleLevel);
         levelSubmitBtn.setText("SEARCH LEVEL");
 
-        clearTreeBtn = new UIButton(this, 0, 0, UIButton.btnImage, this::clearTree);
+        clearTreeBtn = new UIButton(this, this::clearTree);
         clearTreeBtn.setText("CLEAR TREE");
 
-        backBtn = new UIButton(this, 30, 30, UIButton.btnImage, () -> {
+        backBtn = new UIButton(this, 30, 30, () -> {
             State.goTo(MainState.STATE_NAME);
             State.getCurrentState().updateDimensions(currentDimension);
         });
         backBtn.setText("BACK TO HOME");
         backBtn.updateCoordsBounds(new Rectangle(20, 20, backBtn.getWidth() + 30, backBtn.getHeight() + 10));
 
-        preorderBtn = new UIButton(this, 0, 0, UIButton.btnImage, () -> setCurrentType(LIST_TYPE.PREORDER));
+        preorderBtn = new UIButton(this, () -> setCurrentType(LIST_TYPE.PREORDER));
         preorderBtn.setText("PREORDER");
 
-        postorderBtn = new UIButton(this, 0, 0, UIButton.btnImage, () -> setCurrentType(LIST_TYPE.POSTORDER));
+        postorderBtn = new UIButton(this, () -> setCurrentType(LIST_TYPE.POSTORDER));
         postorderBtn.setText("POSTORDER");
 
-        inorderBtn = new UIButton(this, 0, 0, UIButton.btnImage, () -> setCurrentType(LIST_TYPE.INORDER));
+        inorderBtn = new UIButton(this, () -> setCurrentType(LIST_TYPE.INORDER));
         inorderBtn.setText("INORDER");
 
         boxList = new UIBoxList(
