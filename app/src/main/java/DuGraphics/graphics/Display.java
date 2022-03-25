@@ -75,6 +75,10 @@ public class Display {
         gameCanvas.addMouseMotionListener(l);
     }
 
+    public void setTitle(String title) {
+        frame.setTitle(title);
+    }
+
     public JFrame getFrame() {
         return frame;
     }

@@ -53,7 +53,7 @@ public class TreeState extends State {
     private static final String[] LIST_TYPE_ALIASES = new String[]{"PREORDER", "INORDER", "POSTORDER", "LEVEL"};
 
     public TreeState(Handler handler) {
-        super(STATE_NAME, handler);
+        super(STATE_NAME, handler, "Tree visualizer");
 
         bstData = new BST();
         rightColumnDimension = new Dimension();

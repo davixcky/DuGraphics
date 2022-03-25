@@ -101,8 +101,10 @@ public class App implements Runnable, DisplayController {
         // Set mouse and key listeners
         keyManager.update();
 
-        if (State.getCurrentState() != null)
+        if (State.getCurrentState() != null) {
             State.getCurrentState().update();
+            display.setTitle("DuGraphics | " + State.getCurrentNavigationTitle());
+        }
 
     }
 

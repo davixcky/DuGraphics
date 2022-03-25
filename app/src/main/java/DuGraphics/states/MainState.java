@@ -24,7 +24,7 @@ public class MainState extends State {
     public static final String STATE_NAME = "MAIN_STATE";
 
     public MainState(Handler handler) {
-        super(STATE_NAME, handler);
+        super(STATE_NAME, handler, "Home");
 
         random = new Random();
 
