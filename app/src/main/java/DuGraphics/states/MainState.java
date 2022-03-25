@@ -17,7 +17,7 @@ public class MainState extends State {
     private int red, green, blue;
     private int opacity = 0;
     private boolean increase = true;
-    private UIButton treeVisualizerBtn, settingsBtn, sourceCodeBtn, exitBtn;
+    private UIButton treeVisualizerBtn, graphVisualizerBtn, sourceCodeBtn, exitBtn;
 
     private Dimension titleDimensions;
 
@@ -49,7 +49,12 @@ public class MainState extends State {
         });
         treeVisualizerBtn.setText("TREE VISUALIZER");
 
-        settingsBtn = StaticElements.settingsBtn(this, handler, 0, 0);
+        graphVisualizerBtn = new UIButton(this, 0, 0, UIButton.btnImage, () -> {
+           State.goTo(GraphState.STATE_NAME);
+           State.getCurrentState().updateDimensions(currentDimension);
+        });
+        graphVisualizerBtn.setText("GRAPH VISUALIZERS");
+
         exitBtn = StaticElements.exitBtn(this, handler, 0, 0);
         sourceCodeBtn = new UIButton(this, 0, 0, UIButton.btnImage, () -> {
             try {
@@ -60,7 +65,7 @@ public class MainState extends State {
         });
         sourceCodeBtn.setText("CODEBASE");
 
-        uiManager.addObjects(treeVisualizerBtn, settingsBtn, sourceCodeBtn, exitBtn);
+        uiManager.addObjects(treeVisualizerBtn, graphVisualizerBtn, sourceCodeBtn, exitBtn);
 
         resizeComponents();
     }
@@ -115,8 +120,8 @@ public class MainState extends State {
         int y = getDynamicY(height);
 
         treeVisualizerBtn.updateCoordsBounds(new Rectangle(x, y, width, height));
-        settingsBtn.updateCoordsBounds(new Rectangle(x, (int) UIButton.getRelativeHeight(treeVisualizerBtn), width, height));
-        sourceCodeBtn.updateCoordsBounds(new Rectangle(x, (int) UIButton.getRelativeHeight(settingsBtn), width, height));
+        graphVisualizerBtn.updateCoordsBounds(new Rectangle(x, (int) UIButton.getRelativeHeight(treeVisualizerBtn), width, height));
+        sourceCodeBtn.updateCoordsBounds(new Rectangle(x, (int) UIButton.getRelativeHeight(graphVisualizerBtn), width, height));
         exitBtn.updateCoordsBounds(new Rectangle(x, (int) UIButton.getRelativeHeight(sourceCodeBtn), width, height));
     }
 }

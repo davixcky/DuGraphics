@@ -9,6 +9,7 @@ import DuGraphics.graphics.Display;
 import DuGraphics.graphics.DisplayController;
 import DuGraphics.input.KeyManager;
 import DuGraphics.input.MouseManager;
+import DuGraphics.states.GraphState;
 import DuGraphics.states.MainState;
 import DuGraphics.states.State;
 import DuGraphics.states.TreeState;
@@ -31,9 +32,6 @@ public class App implements Runnable, DisplayController {
     private Display display;
     private Dimension windowSize = new Dimension(1080, 720);
     private Image background;
-
-    private MainState mainState;
-    private TreeState treeState;
 
     public App() {
         Assets.init();
@@ -60,8 +58,9 @@ public class App implements Runnable, DisplayController {
     }
 
     private void initStates() {
-        mainState = new MainState(new Handler(this));
-        treeState = new TreeState(new Handler(this));
+        new MainState(new Handler(this));
+        new TreeState(new Handler(this));
+        new GraphState(new Handler(this));
     }
 
     public synchronized void start() {

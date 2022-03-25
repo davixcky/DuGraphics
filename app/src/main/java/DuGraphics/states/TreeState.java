@@ -43,7 +43,7 @@ public class TreeState extends State {
     private int currentLevel = 1;
     private boolean shouldUpdate = false;
 
-    private enum LIST_TYPE {
+    enum LIST_TYPE {
         PREORDER,
         INORDER,
         POSTORDER,
