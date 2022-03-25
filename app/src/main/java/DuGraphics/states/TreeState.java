@@ -39,9 +39,18 @@ public class TreeState extends State {
 
     private UIBoxList boxList;
 
-    private String currentListType = "LEVEL";
+    private LIST_TYPE currentListType = LIST_TYPE.PREORDER;
     private int currentLevel = 1;
     private boolean shouldUpdate = false;
+
+    private enum LIST_TYPE {
+        PREORDER,
+        INORDER,
+        POSTORDER,
+        LEVEL,
+    }
+
+    private static final String[] LIST_TYPE_ALIASES = new String[]{"PREORDER", "INORDER", "POSTORDER", "LEVEL"};
 
     public TreeState(Handler handler) {
         super(STATE_NAME, handler);
@@ -82,13 +91,13 @@ public class TreeState extends State {
         backBtn.setText("BACK TO HOME");
         backBtn.updateCoordsBounds(new Rectangle(20, 20, backBtn.getWidth() + 30, backBtn.getHeight() + 10));
 
-        preorderBtn = new UIButton(this, 0, 0, UIButton.btnImage, this::handlePreorder);
+        preorderBtn = new UIButton(this, 0, 0, UIButton.btnImage, () -> setCurrentType(LIST_TYPE.PREORDER));
         preorderBtn.setText("PREORDER");
 
-        postorderBtn = new UIButton(this, 0, 0, UIButton.btnImage, this::handlePostorder);
+        postorderBtn = new UIButton(this, 0, 0, UIButton.btnImage, () -> setCurrentType(LIST_TYPE.POSTORDER));
         postorderBtn.setText("POSTORDER");
 
-        inorderBtn = new UIButton(this, 0, 0, UIButton.btnImage, this::handleInorder);
+        inorderBtn = new UIButton(this, 0, 0, UIButton.btnImage, () -> setCurrentType(LIST_TYPE.INORDER));
         inorderBtn.setText("INORDER");
 
         boxList = new UIBoxList(
@@ -120,35 +129,25 @@ public class TreeState extends State {
         System.out.println(currentListType);
 
         boxList.reset();
-        boxList.setTitle(currentListType);
+        boxList.setTitle(LIST_TYPE_ALIASES[currentListType.ordinal()]);
         switch (currentListType) {
-            case "LEVEL" -> {
+            case LEVEL -> {
                 bstData.level(currentLevel, (node) -> {
                     boxList.addNode(node.getValue());
                 });
                 boxList.setTitle("Values of level #" + currentLevel);
             }
-            case "PREORDER" -> bstData.preorder((node) -> boxList.addNode(node.getValue()));
-            case "POSTORDER" -> bstData.postorder((node) -> boxList.addNode(node.getValue()));
-            case "INORDER" -> bstData.inorder((node) -> boxList.addNode(node.getValue()));
+            case PREORDER -> bstData.preorder((node) -> boxList.addNode(node.getValue()));
+            case POSTORDER -> bstData.postorder((node) -> boxList.addNode(node.getValue()));
+            case INORDER -> bstData.inorder((node) -> boxList.addNode(node.getValue()));
         }
 
         shouldUpdate = false;
     }
 
-    private void handlePreorder() {
-        currentListType = "PREORDER";
+    private void setCurrentType(LIST_TYPE currentListType) {
         shouldUpdate = true;
-    }
-
-    private void handlePostorder() {
-        currentListType = "POSTORDER";
-        shouldUpdate = true;
-    }
-
-    private void handleInorder() {
-        currentListType = "INORDER";
-        shouldUpdate = true;
+        this.currentListType = currentListType;
     }
 
     private void clearTree() {
@@ -159,8 +158,7 @@ public class TreeState extends State {
 
     private void handleLevel() {
         currentLevel = levelInput.getValueAsInteger();
-        currentListType = "LEVEL";
-        shouldUpdate = true;
+        setCurrentType(LIST_TYPE.LEVEL);
     }
 
     private void saveValue() {
@@ -356,6 +354,5 @@ public class TreeState extends State {
         levelSubmitBtn.setFontSize(fontSize);
         clearTreeBtn.setFontSize(fontSize);
         preorderBtn.setFontSize(fontSize);
-
     }
 }
