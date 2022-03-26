@@ -54,7 +54,7 @@ public class MainState extends State {
            State.goTo(GraphState.STATE_NAME);
            State.getCurrentState().updateDimensions(currentDimension);
         });
-        graphVisualizerBtn.setText("GRAPH VISUALIZERS");
+        graphVisualizerBtn.setText("GRAPH VISUALIZER");
 
         exitBtn = StaticElements.exitBtn(this, handler, 0, 0);
         sourceCodeBtn = new UIButton(this, 0, 0, UIButton.btnImage, () -> {
