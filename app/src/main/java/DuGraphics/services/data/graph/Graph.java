@@ -4,15 +4,13 @@ import DuGraphics.services.data.LinkedList.LinkedList;
 
 import java.util.Iterator;
 import java.util.Queue;
-import java.util.Stack;
-import java.util.Vector;
 
 public class Graph<T> {
 
     private final LinkedList<LinkedList<T>> nodeList;
     private final LinkedList<T> keys;
 
-    public Graph(Class<? extends T> cls) {
+    public Graph() {
         nodeList = new LinkedList<>();
         keys = new LinkedList<>();
     }
@@ -111,6 +109,10 @@ public class Graph<T> {
             }
         }
         return true;
+    }
+
+    public LinkedList<T> getKeys() {
+        return keys;
     }
 
     @Override
