@@ -2,6 +2,7 @@ package DuGraphics.states;
 
 import DuGraphics.Handler;
 import DuGraphics.gfx.Assets;
+import DuGraphics.states.graph.GraphState;
 import DuGraphics.ui.StaticElements;
 import DuGraphics.ui.UIButton;
 import DuGraphics.ui.UIObject;

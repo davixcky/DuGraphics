@@ -9,7 +9,7 @@ import DuGraphics.graphics.Display;
 import DuGraphics.graphics.DisplayController;
 import DuGraphics.input.KeyManager;
 import DuGraphics.input.MouseManager;
-import DuGraphics.states.GraphState;
+import DuGraphics.states.graph.GraphState;
 import DuGraphics.states.MainState;
 import DuGraphics.states.State;
 import DuGraphics.states.TreeState;
@@ -27,8 +27,6 @@ public class App implements Runnable, DisplayController {
     public int ticks;
     private boolean running = false;
     private Thread gameThread;
-    private BufferStrategy bs;
-    private Graphics g;
     private Display display;
     private Dimension windowSize = new Dimension(1080, 720);
     private Image background;
@@ -108,13 +106,13 @@ public class App implements Runnable, DisplayController {
     }
 
     private void render() {
-        bs = display.getGameCanvas().getBufferStrategy();
+        BufferStrategy bs = display.getGameCanvas().getBufferStrategy();
         if (bs == null) {
             display.getGameCanvas().createBufferStrategy(3);
             return;
         }
 
-        g = bs.getDrawGraphics();
+        Graphics g = bs.getDrawGraphics();
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g.clearRect(0, 0, windowSize.width, windowSize.height);
