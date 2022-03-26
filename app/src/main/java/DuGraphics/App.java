@@ -53,6 +53,8 @@ public class App implements Runnable, DisplayController {
         changeBackground("/backgrounds/background_12.jpg");
 
         State.goTo(MainState.STATE_NAME);
+
+        display.start();
     }
 
     private void initStates() {

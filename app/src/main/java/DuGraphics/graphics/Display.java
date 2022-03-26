@@ -22,6 +22,10 @@ public class Display {
         createDisplay();
     }
 
+    public void start() {
+        frame.setVisible(true);
+    }
+
     private void createDisplay() {
         createFrame();
         createCanvas();
@@ -31,7 +35,6 @@ public class Display {
         frame = new JFrame(title);
         frame.setSize(windowSize);
         frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
 
         frame.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentResized(ComponentEvent evt) {
