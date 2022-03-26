@@ -10,9 +10,9 @@ import DuGraphics.graphics.DisplayController;
 import DuGraphics.input.KeyManager;
 import DuGraphics.input.MouseManager;
 import DuGraphics.states.graph.GraphState;
-import DuGraphics.states.MainState;
+import DuGraphics.states.main.MainState;
 import DuGraphics.states.State;
-import DuGraphics.states.TreeState;
+import DuGraphics.states.tree.TreeState;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,10 +1,12 @@
-package DuGraphics.states;
+package DuGraphics.states.tree;
 
 import DuGraphics.Handler;
 import DuGraphics.gfx.Assets;
 import DuGraphics.services.data.common.Node;
 import DuGraphics.services.data.tree.BST;
 import DuGraphics.services.data.tree.BSTNode;
+import DuGraphics.states.State;
+import DuGraphics.states.main.MainState;
 import DuGraphics.ui.UIButton;
 import DuGraphics.ui.UIInput;
 import DuGraphics.ui.UIObject;

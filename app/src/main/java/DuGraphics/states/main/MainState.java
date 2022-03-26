@@ -1,7 +1,9 @@
-package DuGraphics.states;
+package DuGraphics.states.main;
 
 import DuGraphics.Handler;
 import DuGraphics.gfx.Assets;
+import DuGraphics.states.State;
+import DuGraphics.states.tree.TreeState;
 import DuGraphics.states.graph.GraphState;
 import DuGraphics.ui.StaticElements;
 import DuGraphics.ui.UIButton;
