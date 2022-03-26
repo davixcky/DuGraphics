@@ -105,7 +105,7 @@ public class TreeState extends State {
         boxList = new UIBoxList(
                 this,
                 20, (int) (currentDimension.height * 0.7f),
-                currentDimension.width - rightColumnDimension.width - 20,
+                currentDimension.width / 2,
                 currentDimension.height
         );
 
@@ -345,7 +345,7 @@ public class TreeState extends State {
         boxList.updateCoordsBounds(new Rectangle(
                 20,
                 (int) (currentDimension.height * 0.7f),
-                currentDimension.width - rightColumnDimension.width - 60,
+                currentDimension.width / 2,
                 currentDimension.height
         ));
 
