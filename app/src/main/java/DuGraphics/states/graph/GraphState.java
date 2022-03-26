@@ -5,6 +5,8 @@ import DuGraphics.services.data.LinkedList.LinkedList;
 import DuGraphics.services.data.graph.GraphNode;
 import DuGraphics.services.data.parsing.GraphParser;
 import DuGraphics.states.State;
+import DuGraphics.states.main.MainState;
+import DuGraphics.ui.StaticElements;
 import DuGraphics.ui.UIButton;
 import DuGraphics.ui.components.UIGraphNode;
 import DuGraphics.ui.components.wrapper.fileChooser.IFileController;
@@ -20,6 +22,7 @@ public class GraphState extends State {
 
     private final Dimension rightColumnDimension;
     private UIButton
+            backBtn,
             fileChooserBtn;
 
     private final HashMap<String, UIGraphNode> uiNodes;
@@ -46,7 +49,16 @@ public class GraphState extends State {
 
     @Override
     protected void initComponents() {
-        fileChooserBtn = new UIButton(this, () -> fileChooser.launchDialog(new IFileController() {
+        fileChooserBtn = new UIButton(this, this::fileChooserController);
+        fileChooserBtn.setText("CHOOSE FILE");
+
+        backBtn = StaticElements.backBtn(this, MainState.STATE_NAME);
+
+        uiManager.addObjects(fileChooserBtn, backBtn);
+    }
+
+    private void fileChooserController() {
+        fileChooser.launchDialog(new IFileController() {
             @Override
             public void onSuccess(File f) {
                 System.out.println("File: " + f.getAbsolutePath());
@@ -59,10 +71,7 @@ public class GraphState extends State {
                 // TODO: Handle file cancellation
                 System.out.println("File not selected");
             }
-        }));
-        fileChooserBtn.setText("CHOOSE FILE");
-
-        uiManager.addObjects(fileChooserBtn);
+        });
     }
 
     @Override
@@ -79,6 +88,8 @@ public class GraphState extends State {
         if (graphParser != null && graphParser.isGraphLoaded()) {
             drawGraph((Graphics2D) g, 220, 220);
         }
+
+        backBtn.render(g);
 
         if (currentDimension.width > 729) {
             createRect((Graphics2D) g);
@@ -128,7 +139,23 @@ public class GraphState extends State {
 
     @Override
     protected void resizeComponents() {
+        int height = 20 + (int) (currentDimension.height * 0.03f);
+
         int containerWidth = (int) (currentDimension.width * 0.2f);
+        int inputHeight = (int) (currentDimension.height * 0.04f);
+
+        int width = (int) (containerWidth * 0.8f);
+        int y = 60;
+
+        int spacingX = (int) (containerWidth * 0.1f);
+        int initialX = currentDimension.width - containerWidth + spacingX;
+
         rightColumnDimension.setSize(containerWidth, currentDimension.height);
+        fileChooserBtn.updateCoordsBounds(new Rectangle(initialX, y, width, height));
+        backBtn.updateCoordsBounds(new Rectangle(20, 20, width, height));
+
+        int fontSize = (int) (containerWidth * 0.05f);
+        backBtn.setFontSize(fontSize);
+        fileChooserBtn.setFontSize(fontSize);
     }
 }
