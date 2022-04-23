@@ -76,9 +76,10 @@ public class UIBoxList extends UIBufferedObject {
                 Assets.getFont(Assets.FontsName.SLKSCR, 14));
 
         int i = 0;
+        int nextY = 40;
         for (int box : boxes) {
             graphics2D.setColor(Color.red);
-            graphics2D.fillRect(i, 40, 40, 40);
+            graphics2D.fillRect(i, nextY, 40, 40);
             UIObject.drawString(graphics2D, box + "",
                     40 / 2 + i,
                     20 + 40,
@@ -86,6 +87,11 @@ public class UIBoxList extends UIBufferedObject {
                     Color.white,
                     Assets.getFont(Assets.FontsName.SLKSCR, 14));
             i += 50;
+
+            if (i >= width) {
+                nextY += 50;
+                i = 0;
+            }
         }
     }
 
