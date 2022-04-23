@@ -9,9 +9,10 @@ import DuGraphics.graphics.Display;
 import DuGraphics.graphics.DisplayController;
 import DuGraphics.input.KeyManager;
 import DuGraphics.input.MouseManager;
-import DuGraphics.states.MainState;
+import DuGraphics.states.graph.GraphState;
+import DuGraphics.states.main.MainState;
 import DuGraphics.states.State;
-import DuGraphics.states.TreeState;
+import DuGraphics.states.tree.TreeState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,14 +27,9 @@ public class App implements Runnable, DisplayController {
     public int ticks;
     private boolean running = false;
     private Thread gameThread;
-    private BufferStrategy bs;
-    private Graphics g;
     private Display display;
     private Dimension windowSize = new Dimension(1080, 720);
     private Image background;
-
-    private MainState mainState;
-    private TreeState treeState;
 
     public App() {
         Assets.init();
@@ -57,11 +53,14 @@ public class App implements Runnable, DisplayController {
         changeBackground("/backgrounds/background_12.jpg");
 
         State.goTo(MainState.STATE_NAME);
+
+        display.start();
     }
 
     private void initStates() {
-        mainState = new MainState(new Handler(this));
-        treeState = new TreeState(new Handler(this));
+        new MainState(new Handler(this));
+        new TreeState(new Handler(this));
+        new GraphState(new Handler(this));
     }
 
     public synchronized void start() {
@@ -101,19 +100,21 @@ public class App implements Runnable, DisplayController {
         // Set mouse and key listeners
         keyManager.update();
 
-        if (State.getCurrentState() != null)
+        if (State.getCurrentState() != null) {
             State.getCurrentState().update();
+            display.setTitle("DuGraphics | " + State.getCurrentNavigationTitle());
+        }
 
     }
 
     private void render() {
-        bs = display.getGameCanvas().getBufferStrategy();
+        BufferStrategy bs = display.getGameCanvas().getBufferStrategy();
         if (bs == null) {
             display.getGameCanvas().createBufferStrategy(3);
             return;
         }
 
-        g = bs.getDrawGraphics();
+        Graphics g = bs.getDrawGraphics();
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g.clearRect(0, 0, windowSize.width, windowSize.height);

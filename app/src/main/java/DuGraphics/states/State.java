@@ -15,15 +15,17 @@ public abstract class State {
     protected UIManager uiManager;
 
     protected Dimension currentDimension;
+    protected String navigationTitle;
 
     private static final HashMap<String, State> statesRouting = new HashMap<>();
 
-    public State(String key, Handler handler) {
+    public State(String key, Handler handler, String navigationTitle) {
         this.handler = handler;
 
         currentDimension = handler.boardDimensions();
         uiManager = new UIManager();
         statesRouting.put(key, this);
+        this.navigationTitle = navigationTitle;
 
         System.out.printf("STATE: Registering a new state %s\n", key);
     }
@@ -78,6 +80,10 @@ public abstract class State {
         setCurrentState(nextState);
 
         // TODO: Fix resizing when switching between tabs
+    }
+
+    public static String getCurrentNavigationTitle() {
+        return currentState.navigationTitle;
     }
 
     protected abstract void initComponents();

@@ -5,11 +5,14 @@ import DuGraphics.states.State;
 
 public class StaticElements {
 
-    public static UIButton settingsBtn(State parent, Handler handler, float x, float y) {
-        UIButton settingsBtn = new UIButton(parent, x, y, UIButton.btnImage, () -> System.out.println("Settings button pressed"));
-        settingsBtn.setText("SETTINGS");
+    public static UIButton backBtn(State parent, String previousRegisteredName) {
+        UIButton backBtn = new UIButton(parent, 30, 30, () -> {
+            State.goTo(previousRegisteredName);
+            State.getCurrentState().updateDimensions(parent.getDimension());
+        });
+        backBtn.setText("BACK TO HOME");
 
-        return settingsBtn;
+        return backBtn;
     }
 
     public static UIButton exitBtn(State parent, Handler handler, float x, float y) {

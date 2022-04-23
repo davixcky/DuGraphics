@@ -1,15 +1,15 @@
 package DuGraphics.input;
 
+import DuGraphics.services.data.LinkedList.LinkedList;
 import DuGraphics.ui.UIManager;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class KeyManager implements KeyListener {
 
-    private HashMap<String, ArrayList<KeyListener>> keyListeners;
+    private HashMap<String, LinkedList<KeyListener>> keyListeners;
     private boolean keys[];
     private UIManager uiManager;
 
@@ -30,7 +30,7 @@ public class KeyManager implements KeyListener {
         if (e.getKeyCode() >= 256 || e.getKeyCode() < 0)
             return;
 
-        ArrayList<KeyListener> listeners = keyListeners.get(Integer.toString(e.getKeyCode()));
+        LinkedList<KeyListener> listeners = keyListeners.get(Integer.toString(e.getKeyCode()));
         if (listeners != null) {
             for (KeyListener l : listeners) {
                 l.typed();
@@ -43,7 +43,7 @@ public class KeyManager implements KeyListener {
         if (e.getKeyCode() >= 256 || e.getKeyCode() < 0)
             return;
 
-        ArrayList<KeyListener> listeners = keyListeners.get(Integer.toString(e.getKeyCode()));
+        LinkedList<KeyListener> listeners = keyListeners.get(Integer.toString(e.getKeyCode()));
         if (listeners != null) {
             for (KeyListener l : listeners) {
                 l.pressed();
@@ -60,7 +60,7 @@ public class KeyManager implements KeyListener {
         if (e.getKeyCode() >= 256 || e.getKeyCode() < 0)
             return;
 
-        ArrayList<KeyListener> listeners = keyListeners.get(Integer.toString(e.getKeyCode()));
+        LinkedList<KeyListener> listeners = keyListeners.get(Integer.toString(e.getKeyCode()));
         if (listeners != null) {
             for (KeyListener l : listeners) {
                 l.released();
@@ -74,10 +74,10 @@ public class KeyManager implements KeyListener {
         String key = Integer.toString(keyCode);
 
         if (!keyListeners.containsKey(key)) {
-            keyListeners.put(key, new ArrayList<>());
+            keyListeners.put(key, new LinkedList<>());
         }
 
-        ArrayList<KeyListener> listeners = keyListeners.get(key);
+        LinkedList<KeyListener> listeners = keyListeners.get(key);
         listeners.add(l);
     }
 

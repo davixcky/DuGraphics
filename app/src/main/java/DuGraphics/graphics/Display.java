@@ -22,6 +22,10 @@ public class Display {
         createDisplay();
     }
 
+    public void start() {
+        frame.setVisible(true);
+    }
+
     private void createDisplay() {
         createFrame();
         createCanvas();
@@ -31,7 +35,6 @@ public class Display {
         frame = new JFrame(title);
         frame.setSize(windowSize);
         frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
 
         frame.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentResized(ComponentEvent evt) {
@@ -73,6 +76,10 @@ public class Display {
     public void addMouseMotionListener(MouseMotionListener l) {
         frame.addMouseMotionListener(l);
         gameCanvas.addMouseMotionListener(l);
+    }
+
+    public void setTitle(String title) {
+        frame.setTitle(title);
     }
 
     public JFrame getFrame() {

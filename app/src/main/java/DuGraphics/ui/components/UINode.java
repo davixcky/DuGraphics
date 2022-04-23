@@ -1,6 +1,6 @@
 package DuGraphics.ui.components;
 
-import DuGraphics.services.data.BSTNode;
+import DuGraphics.services.data.tree.BSTNode;
 import DuGraphics.states.State;
 
 import java.awt.*;

@@ -1,24 +1,24 @@
 package DuGraphics.ui.components;
 
 import DuGraphics.gfx.Assets;
+import DuGraphics.services.data.LinkedList.LinkedList;
 import DuGraphics.states.State;
 import DuGraphics.ui.UIObject;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 
 public class UIBoxList extends UIBufferedObject {
 
-    private final ArrayList<Integer> boxes;
+    private final LinkedList<Integer> boxes;
     private String title;
 
     public UIBoxList(State parent, float x, float y, int width, int height) {
         super(parent, x, y, width, height);
 
         title = "";
-        boxes = new ArrayList<>();
+        boxes = new LinkedList<>();
 
         init();
     }
@@ -76,9 +76,10 @@ public class UIBoxList extends UIBufferedObject {
                 Assets.getFont(Assets.FontsName.SLKSCR, 14));
 
         int i = 0;
+        int nextY = 40;
         for (int box : boxes) {
             graphics2D.setColor(Color.red);
-            graphics2D.fillRect(i, 40, 40, 40);
+            graphics2D.fillRect(i, nextY, 40, 40);
             UIObject.drawString(graphics2D, box + "",
                     40 / 2 + i,
                     20 + 40,
@@ -86,6 +87,11 @@ public class UIBoxList extends UIBufferedObject {
                     Color.white,
                     Assets.getFont(Assets.FontsName.SLKSCR, 14));
             i += 50;
+
+            if (i >= width) {
+                nextY += 50;
+                i = 0;
+            }
         }
     }
 
