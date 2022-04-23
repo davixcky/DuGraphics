@@ -6,8 +6,10 @@ import DuGraphics.services.data.graph.GraphNode;
 import DuGraphics.services.data.parsing.GraphParser;
 import DuGraphics.states.State;
 import DuGraphics.states.main.MainState;
+import DuGraphics.ui.ActionListener;
 import DuGraphics.ui.StaticElements;
 import DuGraphics.ui.UIButton;
+import DuGraphics.ui.UIInput;
 import DuGraphics.ui.components.UIGraphNode;
 import DuGraphics.ui.components.wrapper.fileChooser.IFileController;
 import DuGraphics.ui.components.wrapper.fileChooser.UIFileChooser;
@@ -24,6 +26,8 @@ public class GraphState extends State {
     private UIButton
             backBtn,
             fileChooserBtn;
+    private UIInput
+            nodeTargetInput;
 
     private final HashMap<String, UIGraphNode> uiNodes;
 
@@ -49,12 +53,21 @@ public class GraphState extends State {
 
     @Override
     protected void initComponents() {
+        backBtn = StaticElements.backBtn(this, MainState.STATE_NAME);
+
+        nodeTargetInput = new UIInput(this);
+        nodeTargetInput.setListener(new ActionListener() {
+            @Override
+            public void actionPerformed() {
+
+            }
+        });
+        nodeTargetInput.setCharLimits(1, 12);
+
         fileChooserBtn = new UIButton(this, this::fileChooserController);
         fileChooserBtn.setText("CHOOSE FILE");
 
-        backBtn = StaticElements.backBtn(this, MainState.STATE_NAME);
-
-        uiManager.addObjects(fileChooserBtn, backBtn);
+        uiManager.addObjects(backBtn, fileChooserBtn, nodeTargetInput);
     }
 
     private void fileChooserController() {
@@ -151,7 +164,10 @@ public class GraphState extends State {
         int initialX = currentDimension.width - containerWidth + spacingX;
 
         rightColumnDimension.setSize(containerWidth, currentDimension.height);
-        fileChooserBtn.updateCoordsBounds(new Rectangle(initialX, y, width, height));
+        nodeTargetInput.updateCoordsBounds(new Rectangle(initialX, y, width, inputHeight));
+        nodeTargetInput.setWidth(width);
+        fileChooserBtn.updateCoordsBounds(new Rectangle(initialX, (int) (nodeTargetInput.getY() + nodeTargetInput.getHeight()), width, height));
+
         backBtn.updateCoordsBounds(new Rectangle(20, 20, width, height));
 
         int fontSize = (int) (containerWidth * 0.05f);
